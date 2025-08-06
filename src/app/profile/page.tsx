@@ -47,8 +47,10 @@ export default function ProfilePage() {
     initializeApp();
   }, []);
 
-  // Использование хука для работы с профилем
-  const { profile, loading, error, updateProfile } = useProfile(telegramUser?.id || 0);
+  // Использование хука для работы с профилем только после инициализации
+  const { profile, loading, error, updateProfile } = useProfile(
+    isInitialized && telegramUser?.id ? telegramUser.id : 0
+  );
 
   // Локальное состояние формы
   const [formData, setFormData] = useState<UserProfile>({
@@ -73,7 +75,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (profile) {
       setFormData(profile);
-    } else if (telegramUser) {
+    } else if (telegramUser && isInitialized) {
       // Если профиль не найден, заполняем данными из Telegram
       setFormData(prev => ({
         ...prev,
@@ -84,7 +86,55 @@ export default function ProfilePage() {
         photoUrl: telegramUser.photo_url || ''
       }));
     }
-  }, [profile, telegramUser]);
+  }, [profile, telegramUser, isInitialized]);
+
+  // Показываем загрузку только если еще не инициализированы
+  if (!isInitialized) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Инициализация приложения...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Показываем загрузку профиля только если есть telegramId
+  if (loading && telegramUser?.id) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Загрузка профиля...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Показываем ошибку только если есть telegramId
+  if (error && telegramUser?.id) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <p className="text-red-600">Ошибка загрузки профиля: {error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Если нет пользователя Telegram, показываем сообщение
+  if (!telegramUser) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <p className="text-red-600">Приложение должно быть открыто через Telegram</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSave = async () => {
     if (!telegramUser) {
@@ -150,28 +200,6 @@ export default function ProfilePage() {
     { value: 'living', label: 'Живу', icon: Home },
     { value: 'other', label: 'Другое', icon: Users }
   ];
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Загрузка профиля...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <p className="text-red-600">Ошибка загрузки профиля: {error}</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-6">

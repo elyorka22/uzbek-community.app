@@ -104,10 +104,16 @@ interface UseProfileReturn {
 
 export function useProfile(telegramId: number): UseProfileReturn {
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchProfile = async () => {
+    // Не делаем запрос если telegramId равен 0
+    if (!telegramId) {
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -152,6 +158,10 @@ export function useProfile(telegramId: number): UseProfileReturn {
   };
 
   const updateProfile = async (data: Partial<UserProfile>) => {
+    if (!telegramId) {
+      throw new Error('Telegram ID is required');
+    }
+
     try {
       setError(null);
 
@@ -194,6 +204,10 @@ export function useProfile(telegramId: number): UseProfileReturn {
   };
 
   const deleteProfile = async () => {
+    if (!telegramId) {
+      throw new Error('Telegram ID is required');
+    }
+
     try {
       setError(null);
 
@@ -213,8 +227,12 @@ export function useProfile(telegramId: number): UseProfileReturn {
   };
 
   useEffect(() => {
-    if (telegramId) {
+    if (telegramId > 0) {
       fetchProfile();
+    } else {
+      setLoading(false);
+      setProfile(null);
+      setError(null);
     }
   }, [telegramId]);
 
