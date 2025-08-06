@@ -39,12 +39,16 @@ console.log('🚀 Бот запущен и готов к работе!');
 // Обработчик завершения работы
 process.on('SIGINT', () => {
   console.log('\n🛑 Остановка бота...');
-  bot.stopPolling();
+  if (bot) {
+    bot.stopPolling();
+  }
   process.exit(0);
 });
 
 process.on('SIGTERM', () => {
   console.log('\n🛑 Остановка бота...');
-  bot.stopPolling();
+  if (bot) {
+    bot.stopPolling();
+  }
   process.exit(0);
 }); 
