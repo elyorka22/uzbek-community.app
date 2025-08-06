@@ -85,6 +85,98 @@ export const showTelegramConfirm = (message: string, callback: (confirmed: boole
   webApp.showConfirm(message, callback);
 };
 
+// Функция для получения геолокации
+export const requestLocation = (): Promise<{
+  latitude: number;
+  longitude: number;
+  accuracy: number;
+} | null> => {
+  return new Promise((resolve) => {
+    const webApp = getWebApp();
+    if (!webApp) {
+      console.warn('Telegram Web App not available for location');
+      resolve(null);
+      return;
+    }
+
+    try {
+      webApp.requestLocation((location: any) => {
+        console.log('Location received:', location);
+        resolve({
+          latitude: location.latitude,
+          longitude: location.longitude,
+          accuracy: location.accuracy
+        });
+      });
+    } catch (error) {
+      console.error('Error requesting location:', error);
+      resolve(null);
+    }
+  });
+};
+
+// Функция для получения города по координатам
+export const getCityByCoordinates = async (latitude: number, longitude: number): Promise<{
+  city: string;
+  country: string;
+} | null> => {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`
+    );
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch location data');
+    }
+
+    const data = await response.json();
+    
+    return {
+      city: data.address?.city || data.address?.town || data.address?.village || 'Неизвестно',
+      country: data.address?.country || 'Неизвестно'
+    };
+  } catch (error) {
+    console.error('Error getting city by coordinates:', error);
+    return null;
+  }
+};
+
+// Функция для автоматического определения местоположения
+export const autoDetectLocation = async (): Promise<{
+  city: string;
+  country: string;
+  coordinates?: { latitude: number; longitude: number };
+} | null> => {
+  try {
+    // Запрашиваем геолокацию
+    const location = await requestLocation();
+    
+    if (!location) {
+      console.warn('Location not available');
+      return null;
+    }
+
+    // Получаем город и страну по координатам
+    const cityData = await getCityByCoordinates(location.latitude, location.longitude);
+    
+    if (!cityData) {
+      return null;
+    }
+
+    return {
+      city: cityData.city,
+      country: cityData.country,
+      coordinates: {
+        latitude: location.latitude,
+        longitude: location.longitude
+      }
+    };
+  } catch (error) {
+    console.error('Error in auto location detection:', error);
+    return null;
+  }
+};
+
 // Новая функция для автоматической регистрации
 export const autoRegisterUser = async () => {
   const webApp = getWebApp();

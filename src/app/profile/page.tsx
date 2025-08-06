@@ -7,6 +7,7 @@ import ImageUpload from '@/components/ImageUpload';
 import InterestsSelector from '@/components/InterestsSelector';
 import { Save, User, MapPin, GraduationCap, Briefcase, Home, Users, AlertCircle } from 'lucide-react';
 import { initTelegramApp, getValidatedTelegramUser, autoRegisterUser } from '@/lib/telegram';
+import LocationDetector from '@/components/LocationDetector';
 
 export default function ProfilePage() {
   const [telegramUser, setTelegramUser] = useState<{
@@ -350,6 +351,22 @@ export default function ProfilePage() {
           <InterestsSelector
             selectedInterests={formData.interests}
             onInterestsChange={(interests) => setFormData(prev => ({ ...prev, interests }))}
+          />
+
+          {/* Кнопка автоматического определения местоположения */}
+          <LocationDetector
+            onLocationDetected={(location) => {
+              setFormData(prev => ({
+                ...prev,
+                location: {
+                  country: location.country,
+                  city: location.city
+                }
+              }));
+            }}
+            onError={(error) => {
+              setSaveError(error);
+            }}
           />
 
           {/* Ошибка сохранения */}
