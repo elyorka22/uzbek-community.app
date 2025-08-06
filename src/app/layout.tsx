@@ -42,7 +42,13 @@ export default function RootLayout({
         {/* Telegram Web App скрипт */}
         <Script 
           src="https://telegram.org/js/telegram-web-app.js" 
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
+          onLoad={() => {
+            console.log('Telegram Web App script loaded');
+          }}
+          onError={(e) => {
+            console.error('Failed to load Telegram Web App script:', e);
+          }}
         />
         <div id="root">
           {children}

@@ -25,16 +25,25 @@ export default function ProfilePage() {
   useEffect(() => {
     const initializeApp = async () => {
       try {
+        console.log('Starting Telegram Web App initialization...');
+        
         // Инициализируем Telegram Web App
-        initTelegramApp();
+        const webApp = initTelegramApp();
+        console.log('WebApp initialized:', !!webApp);
         
         // Получаем пользователя
         const user = getValidatedTelegramUser();
+        console.log('Telegram user:', user);
+        
         if (user) {
           setTelegramUser(user);
           
           // Автоматически регистрируем пользователя
+          console.log('Auto-registering user...');
           await autoRegisterUser();
+          console.log('Auto-registration completed');
+        } else {
+          console.warn('No Telegram user found');
         }
         
         setIsInitialized(true);

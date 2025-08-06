@@ -8,7 +8,12 @@ const getWebApp = () => {
   
   if (!WebApp) {
     try {
-      WebApp = require('@twa-dev/sdk');
+      // Используем стандартный Telegram Web App API
+      WebApp = (window as any).Telegram?.WebApp;
+      if (!WebApp) {
+        console.warn('Telegram Web App not available');
+        return null;
+      }
     } catch (error) {
       console.warn('Telegram Web App SDK not available');
       return null;
@@ -21,20 +26,27 @@ const getWebApp = () => {
 export const initTelegramApp = () => {
   const webApp = getWebApp();
   if (!webApp) {
+    console.warn('Telegram Web App not initialized');
     return null;
   }
 
-  // Инициализация Telegram Web App
-  webApp.ready();
-  
-  // Настройка темы
-  webApp.setHeaderColor('#3B82F6'); // Синий цвет
-  webApp.setBackgroundColor('#ffffff');
-  
-  // Расширяем на всю высоту
-  webApp.expand();
-  
-  return webApp;
+  try {
+    // Инициализация Telegram Web App
+    webApp.ready();
+    
+    // Настройка темы
+    webApp.setHeaderColor('#3B82F6'); // Синий цвет
+    webApp.setBackgroundColor('#ffffff');
+    
+    // Расширяем на всю высоту
+    webApp.expand();
+    
+    console.log('Telegram Web App initialized successfully');
+    return webApp;
+  } catch (error) {
+    console.error('Error initializing Telegram Web App:', error);
+    return null;
+  }
 };
 
 export const getTelegramUser = () => {
@@ -126,13 +138,16 @@ export const autoRegisterUser = async () => {
 export const getValidatedTelegramUser = () => {
   const webApp = getWebApp();
   if (!webApp) {
+    console.warn('Telegram Web App not available');
     return null;
   }
 
   const user = webApp.initDataUnsafe?.user;
   if (!user || !user.id) {
+    console.warn('Telegram user data not available');
     return null;
   }
 
+  console.log('Telegram user found:', user);
   return user;
 }; 
