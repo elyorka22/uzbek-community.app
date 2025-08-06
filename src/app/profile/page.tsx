@@ -6,21 +6,7 @@ import { useProfile } from '@/hooks/useProfiles';
 import ImageUpload from '@/components/ImageUpload';
 import InterestsSelector from '@/components/InterestsSelector';
 import { Save, User, MapPin, GraduationCap, Briefcase, Home, Users, AlertCircle } from 'lucide-react';
-
-// Динамический импорт для избежания ошибок на сервере
-const getTelegramUser = () => {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-  
-  try {
-    const { getTelegramUser: getUser } = require('@/lib/telegram');
-    return getUser();
-  } catch (error) {
-    console.warn('Telegram Web App not available');
-    return null;
-  }
-};
+import { initTelegramApp, getValidatedTelegramUser, autoRegisterUser } from '@/lib/telegram';
 
 export default function ProfilePage() {
   const [telegramUser, setTelegramUser] = useState<{
@@ -33,13 +19,32 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Инициализация Telegram Web App
   useEffect(() => {
-    const user = getTelegramUser();
-    if (user) {
-      setTelegramUser(user);
-    }
+    const initializeApp = async () => {
+      try {
+        // Инициализируем Telegram Web App
+        initTelegramApp();
+        
+        // Получаем пользователя
+        const user = getValidatedTelegramUser();
+        if (user) {
+          setTelegramUser(user);
+          
+          // Автоматически регистрируем пользователя
+          await autoRegisterUser();
+        }
+        
+        setIsInitialized(true);
+      } catch (error) {
+        console.error('Error initializing Telegram Web App:', error);
+        setIsInitialized(true);
+      }
+    };
+
+    initializeApp();
   }, []);
 
   // Использование хука для работы с профилем

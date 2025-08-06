@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useProfiles } from '@/hooks/useProfiles';
 import { UserStatus } from '@/types/user';
 import { Search, MapPin, Users, Filter, User, GraduationCap, Briefcase, Home } from 'lucide-react';
+import { initTelegramApp } from '@/lib/telegram';
 
 export default function SearchPage() {
   const [filters, setFilters] = useState({
@@ -15,6 +16,11 @@ export default function SearchPage() {
   });
 
   const [showFilters, setShowFilters] = useState(false);
+
+  // Инициализация Telegram Web App
+  useEffect(() => {
+    initTelegramApp();
+  }, []);
 
   const { profiles, loading, error } = useProfiles({
     country: filters.country || undefined,

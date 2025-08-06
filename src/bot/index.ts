@@ -127,8 +127,8 @@ async function handleCreateProfile(chatId: number) {
       'Создайте свой профиль в нашем приложении!', {
       reply_markup: {
         inline_keyboard: [
-          [{ text: 'Создать профиль', web_app: { url: webAppUrl } }],
-          [{ text: 'Назад в меню', callback_data: 'main_menu' }]
+          [{ text: '📝 Создать профиль', web_app: { url: webAppUrl } }],
+          [{ text: '🔙 Назад в меню', callback_data: 'main_menu' }]
         ]
       }
     });
@@ -165,8 +165,8 @@ async function handleEditProfile(chatId: number) {
       'Редактируйте свой профиль в нашем приложении!', {
       reply_markup: {
         inline_keyboard: [
-          [{ text: 'Редактировать профиль', web_app: { url: webAppUrl } }],
-          [{ text: 'Назад в меню', callback_data: 'main_menu' }]
+          [{ text: '✏️ Редактировать профиль', web_app: { url: webAppUrl } }],
+          [{ text: '🔙 Назад в меню', callback_data: 'main_menu' }]
         ]
       }
     });
@@ -186,8 +186,8 @@ async function handleSearchUsers(chatId: number) {
       'Найдите узбеков по всему миру в нашем приложении!', {
       reply_markup: {
         inline_keyboard: [
-          [{ text: 'Найти узбеков', web_app: { url: webAppUrl } }],
-          [{ text: 'Назад в меню', callback_data: 'main_menu' }]
+          [{ text: '🔍 Найти узбеков', web_app: { url: webAppUrl } }],
+          [{ text: '🔙 Назад в меню', callback_data: 'main_menu' }]
         ]
       }
     });
