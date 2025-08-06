@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import TelegramInit from "@/components/TelegramInit";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -43,13 +44,8 @@ export default function RootLayout({
         <Script 
           src="https://telegram.org/js/telegram-web-app.js" 
           strategy="beforeInteractive"
-          onLoad={() => {
-            console.log('Telegram Web App script loaded');
-          }}
-          onError={(e) => {
-            console.error('Failed to load Telegram Web App script:', e);
-          }}
         />
+        <TelegramInit />
         <div id="root">
           {children}
         </div>
