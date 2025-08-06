@@ -1,16 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseAvailable } from '@/lib/supabase';
 
 // GET /api/profiles - получить все профили
 export async function GET(request: NextRequest) {
   try {
+    if (!isSupabaseAvailable()) {
+      return NextResponse.json(
+        { error: 'Supabase not configured' },
+        { status: 500 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const country = searchParams.get('country');
     const city = searchParams.get('city');
     const status = searchParams.get('status');
     const interests = searchParams.get('interests');
 
-    let query = supabase
+    let query = supabase!
       .from('profiles')
       .select('*')
       .order('created_at', { ascending: false });
@@ -48,6 +55,13 @@ export async function GET(request: NextRequest) {
 // POST /api/profiles - создать новый профиль
 export async function POST(request: NextRequest) {
   try {
+    if (!isSupabaseAvailable()) {
+      return NextResponse.json(
+        { error: 'Supabase not configured' },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const {
       telegram_id,
@@ -71,7 +85,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Проверка существования профиля
-    const { data: existingProfile } = await supabase
+    const { data: existingProfile } = await supabase!
       .from('profiles')
       .select('id')
       .eq('telegram_id', telegram_id)
@@ -85,7 +99,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Создание профиля
-    const { data, error } = await supabase
+    const { data, error } = await supabase!
       .from('profiles')
       .insert({
         telegram_id,

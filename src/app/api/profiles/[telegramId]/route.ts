@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseAvailable } from '@/lib/supabase';
 
 interface RouteParams {
   params: Promise<{ telegramId: string }>;
@@ -11,6 +11,13 @@ export async function GET(
   { params }: RouteParams
 ) {
   try {
+    if (!isSupabaseAvailable()) {
+      return NextResponse.json(
+        { error: 'Supabase not configured' },
+        { status: 500 }
+      );
+    }
+
     const { telegramId } = await params;
     const telegramIdNum = parseInt(telegramId);
 
@@ -21,7 +28,7 @@ export async function GET(
       );
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabase!
       .from('profiles')
       .select('*')
       .eq('telegram_id', telegramIdNum)
@@ -52,6 +59,13 @@ export async function PUT(
   { params }: RouteParams
 ) {
   try {
+    if (!isSupabaseAvailable()) {
+      return NextResponse.json(
+        { error: 'Supabase not configured' },
+        { status: 500 }
+      );
+    }
+
     const { telegramId } = await params;
     const telegramIdNum = parseInt(telegramId);
     const body = await request.json();
@@ -84,7 +98,7 @@ export async function PUT(
     }
 
     // Обновление профиля
-    const { data, error } = await supabase
+    const { data, error } = await supabase!
       .from('profiles')
       .update({
         first_name,
@@ -127,6 +141,13 @@ export async function DELETE(
   { params }: RouteParams
 ) {
   try {
+    if (!isSupabaseAvailable()) {
+      return NextResponse.json(
+        { error: 'Supabase not configured' },
+        { status: 500 }
+      );
+    }
+
     const { telegramId } = await params;
     const telegramIdNum = parseInt(telegramId);
 
@@ -137,7 +158,7 @@ export async function DELETE(
       );
     }
 
-    const { error } = await supabase
+    const { error } = await supabase!
       .from('profiles')
       .delete()
       .eq('telegram_id', telegramIdNum);
