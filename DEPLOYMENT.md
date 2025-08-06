@@ -8,6 +8,7 @@
 - ✅ `package.json` с правильными скриптами
 - ✅ `Procfile` для запуска веб-приложения и бота
 - ✅ `railway.json` с настройками деплоя
+- ✅ `railway-web.json` и `railway-bot.json` для отдельных сервисов
 - ✅ `env.example` с примером переменных окружения
 
 ### 2. Создание проекта на Railway
@@ -19,7 +20,23 @@
 5. Выберите ваш репозиторий `uzbek-community`
 6. Нажмите "Deploy Now"
 
-### 3. Настройка переменных окружения
+### 3. Настройка двух сервисов
+
+После создания проекта у вас будет один сервис. Нужно создать второй:
+
+#### Web Service (уже создан)
+1. Переименуйте существующий сервис в "Web"
+2. В Settings → Start Command установите: `npm run start`
+3. Или переименуйте `railway.json` в `railway-web.json` и переименуйте обратно
+
+#### Bot Service (нужно создать)
+1. Нажмите "New Service"
+2. Выберите "GitHub Repo"
+3. Выберите тот же репозиторий `uzbek-community`
+4. Назовите сервис "Bot"
+5. В Settings → Start Command установите: `npm run bot`
+
+### 4. Настройка переменных окружения
 
 После создания проекта:
 
@@ -57,14 +74,14 @@ NEXT_PUBLIC_APP_URL=https://your-railway-app-url.up.railway.app
 1. После первого деплоя Railway выдаст URL
 2. Скопируйте его → `NEXT_PUBLIC_APP_URL`
 
-### 4. Настройка домена (опционально)
+### 5. Настройка домена (опционально)
 
 1. В Railway перейдите в "Settings"
 2. Раздел "Domains"
 3. Добавьте ваш домен (например, `uzbek-community.com`)
 4. Настройте DNS записи согласно инструкциям Railway
 
-### 5. Проверка деплоя
+### 6. Проверка деплоя
 
 После настройки переменных:
 
@@ -74,7 +91,7 @@ NEXT_PUBLIC_APP_URL=https://your-railway-app-url.up.railway.app
    - Веб-приложение: `https://your-app.up.railway.app`
    - API: `https://your-app.up.railway.app/api/profiles`
 
-### 6. Проверка Telegram-бота
+### 7. Проверка Telegram-бота
 
 1. Найдите вашего бота в Telegram
 2. Отправьте команду `/start`
@@ -91,6 +108,7 @@ NEXT_PUBLIC_APP_URL=https://your-railway-app-url.up.railway.app
 - Проверьте переменную `NEXT_PUBLIC_TELEGRAM_BOT_TOKEN`
 - Убедитесь, что бот не заблокирован
 - Проверьте логи в Railway
+- Убедитесь, что Bot Service запущен с командой `npm run bot`
 
 ### Ошибки базы данных
 - Проверьте переменные Supabase
