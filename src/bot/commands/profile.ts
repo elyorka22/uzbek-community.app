@@ -3,6 +3,11 @@ import { supabase } from '../../lib/supabase';
 
 export async function profileCommand(bot: TelegramBot, chatId: number) {
   try {
+    if (!supabase) {
+      await bot.sendMessage(chatId, 'База данных недоступна. Попробуйте позже.');
+      return;
+    }
+
     // Проверяем, существует ли профиль пользователя
     const { data: profile, error } = await supabase
       .from('profiles')

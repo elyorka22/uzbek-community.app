@@ -3,6 +3,11 @@ import { supabase } from '../../lib/supabase';
 
 export async function searchCommand(bot: TelegramBot, chatId: number) {
   try {
+    if (!supabase) {
+      await bot.sendMessage(chatId, 'База данных недоступна. Попробуйте позже.');
+      return;
+    }
+
     // Проверяем, есть ли у пользователя профиль
     const { data: userProfile } = await supabase
       .from('profiles')
@@ -59,6 +64,11 @@ export async function searchCommand(bot: TelegramBot, chatId: number) {
 // Функция для показа статистики
 export async function showStats(bot: TelegramBot, chatId: number) {
   try {
+    if (!supabase) {
+      await bot.sendMessage(chatId, 'База данных недоступна. Попробуйте позже.');
+      return;
+    }
+
     // Получаем статистику из базы данных
     const { data: profiles, error } = await supabase
       .from('profiles')
