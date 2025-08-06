@@ -14,6 +14,25 @@ let bot: TelegramBot | null = null;
 if (token) {
   bot = new TelegramBot(token, { polling: true });
   
+  // Обработчик ошибок подключения
+  bot.on('error', (error: Error) => {
+    console.error('❌ Ошибка бота:', error.message);
+    if (error.message.includes('Conflict') || error.message.includes('409')) {
+      console.error('⚠️  Конфликт с Telegram API. Возможно:');
+      console.error('   - Бот уже запущен в другом месте');
+      console.error('   - Установлен webhook (удалите через @BotFather)');
+      console.error('   - Несколько экземпляров бота');
+    }
+  });
+
+  // Обработчик polling ошибок
+  bot.on('polling_error', (error: Error) => {
+    console.error('❌ Ошибка polling:', error.message);
+    if (error.message.includes('Conflict') || error.message.includes('409')) {
+      console.error('⚠️  Конфликт с Telegram API. Проверьте webhook в @BotFather');
+    }
+  });
+
   // Обработчик команды /start
   bot.onText(/\/start/, (msg: TelegramBot.Message, match: RegExpExecArray | null) => startCommand(bot!, msg.chat.id));
 
