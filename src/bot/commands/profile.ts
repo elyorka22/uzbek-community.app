@@ -1,7 +1,7 @@
-const TelegramBot = require('node-telegram-bot-api');
+import TelegramBot from 'node-telegram-bot-api';
 import { supabase } from '../../lib/supabase';
 
-export async function profileCommand(bot: any, chatId: number) {
+export async function profileCommand(bot: TelegramBot, chatId: number) {
   try {
     // Проверяем, существует ли профиль пользователя
     const { data: profile, error } = await supabase

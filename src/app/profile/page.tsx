@@ -9,14 +9,19 @@ import InterestsSelector from '@/components/InterestsSelector';
 import { Save, User, MapPin, GraduationCap, Briefcase, Home, Users, AlertCircle } from 'lucide-react';
 
 export default function ProfilePage() {
-  const [telegramUser, setTelegramUser] = useState<any>(null);
+  const [telegramUser, setTelegramUser] = useState<{
+    id: number;
+    first_name?: string;
+    last_name?: string;
+    username?: string;
+    photo_url?: string;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
   // Инициализация Telegram Web App
   useEffect(() => {
-    const webApp = initTelegramApp();
     const user = getTelegramUser();
     if (user) {
       setTelegramUser(user);

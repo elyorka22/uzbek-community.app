@@ -1,8 +1,8 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 // Загружаем переменные окружения перед импортом supabase
 dotenv.config({ path: '.env.local' });
 
-const TelegramBot = require('node-telegram-bot-api');
+import TelegramBot from 'node-telegram-bot-api';
 import { supabase } from '../lib/supabase';
 
 // Тестовая функция для проверки подключения к Supabase
@@ -12,15 +12,17 @@ async function testSupabaseConnection() {
     
     const { data, error } = await supabase
       .from('profiles')
-      .select('count')
-      .limit(1);
+      .select('*')
+      .limit(5);
 
     if (error) {
-      console.error('❌ Ошибка подключения к Supabase:', error.message);
+      console.error('❌ Ошибка при получении профилей:', error);
       return false;
     }
 
-    console.log('✅ Подключение к Supabase успешно');
+    console.log('✅ Профили получены успешно!');
+    console.log(`   Количество профилей: ${data?.length || 0}`);
+    
     return true;
   } catch (error) {
     console.error('❌ Ошибка при тестировании Supabase:', error);

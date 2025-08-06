@@ -1,6 +1,6 @@
-const TelegramBot = require('node-telegram-bot-api');
+import TelegramBot from 'node-telegram-bot-api';
 
-export async function startCommand(bot: any, chatId: number) {
+export async function startCommand(bot: TelegramBot, chatId: number) {
   const welcomeMessage = `
 🌟 Добро пожаловать в Uzbek Community!
 

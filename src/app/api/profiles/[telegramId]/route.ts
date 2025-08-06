@@ -1,15 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+interface RouteParams {
+  params: Promise<{ telegramId: string }>;
+}
+
 // GET /api/profiles/[telegramId] - получить профиль по Telegram ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { telegramId: string } }
+  { params }: RouteParams
 ) {
   try {
-    const telegramId = parseInt(params.telegramId);
+    const { telegramId } = await params;
+    const telegramIdNum = parseInt(telegramId);
 
-    if (isNaN(telegramId)) {
+    if (isNaN(telegramIdNum)) {
       return NextResponse.json(
         { error: 'Invalid Telegram ID' },
         { status: 400 }
@@ -19,7 +24,7 @@ export async function GET(
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
-      .eq('telegram_id', telegramId)
+      .eq('telegram_id', telegramIdNum)
       .single();
 
     if (error) {
@@ -44,13 +49,14 @@ export async function GET(
 // PUT /api/profiles/[telegramId] - обновить профиль
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { telegramId: string } }
+  { params }: RouteParams
 ) {
   try {
-    const telegramId = parseInt(params.telegramId);
+    const { telegramId } = await params;
+    const telegramIdNum = parseInt(telegramId);
     const body = await request.json();
 
-    if (isNaN(telegramId)) {
+    if (isNaN(telegramIdNum)) {
       return NextResponse.json(
         { error: 'Invalid Telegram ID' },
         { status: 400 }
@@ -92,7 +98,7 @@ export async function PUT(
         bio,
         updated_at: new Date().toISOString()
       })
-      .eq('telegram_id', telegramId)
+      .eq('telegram_id', telegramIdNum)
       .select()
       .single();
 
@@ -118,12 +124,13 @@ export async function PUT(
 // DELETE /api/profiles/[telegramId] - удалить профиль
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { telegramId: string } }
+  { params }: RouteParams
 ) {
   try {
-    const telegramId = parseInt(params.telegramId);
+    const { telegramId } = await params;
+    const telegramIdNum = parseInt(telegramId);
 
-    if (isNaN(telegramId)) {
+    if (isNaN(telegramIdNum)) {
       return NextResponse.json(
         { error: 'Invalid Telegram ID' },
         { status: 400 }
@@ -133,7 +140,7 @@ export async function DELETE(
     const { error } = await supabase
       .from('profiles')
       .delete()
-      .eq('telegram_id', telegramId);
+      .eq('telegram_id', telegramIdNum);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });

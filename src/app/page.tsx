@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { User, Users, MapPin, Heart, Search } from 'lucide-react';
+import { User, Users, Heart, Search } from 'lucide-react';
 
 export default function HomePage() {
   return (

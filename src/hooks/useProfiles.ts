@@ -42,7 +42,21 @@ export function useProfiles(options: UseProfilesOptions = {}): UseProfilesReturn
       const data = await response.json();
       
       // Преобразование данных из Supabase в формат UserProfile
-      const transformedProfiles: UserProfile[] = data.profiles.map((profile: any) => ({
+      const transformedProfiles: UserProfile[] = data.profiles.map((profile: {
+        id: string;
+        telegram_id: number;
+        first_name: string;
+        last_name?: string;
+        username?: string;
+        photo_url?: string;
+        country: string;
+        city: string;
+        status: string;
+        interests?: string[];
+        bio?: string;
+        created_at: string;
+        updated_at: string;
+      }) => ({
         id: profile.id,
         telegramId: profile.telegram_id,
         firstName: profile.first_name,

@@ -1,4 +1,4 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 import bot from './index';
 
 // Загружаем переменные окружения

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -12,15 +13,13 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
-// Отдельные экспорты для viewport и themeColor (Next.js 14+)
+// Отдельные экспорты для viewport (Next.js 14+)
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
   userScalable: 'no',
 };
-
-export const themeColor = '#3B82F6';
 
 export default function RootLayout({
   children,
@@ -37,11 +36,14 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Uzbek Community" />
-        
-        {/* Telegram Web App скрипт */}
-        <script src="https://telegram.org/js/telegram-web-app.js"></script>
+        <meta name="theme-color" content="#3B82F6" />
       </head>
       <body className={inter.className}>
+        {/* Telegram Web App скрипт */}
+        <Script 
+          src="https://telegram.org/js/telegram-web-app.js" 
+          strategy="afterInteractive"
+        />
         <div id="root">
           {children}
         </div>

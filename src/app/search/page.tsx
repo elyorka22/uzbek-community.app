@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useProfiles } from '@/hooks/useProfiles';
-import { UserProfile, UserStatus } from '@/types/user';
+import { UserStatus } from '@/types/user';
 import { Search, MapPin, Users, Filter, User, GraduationCap, Briefcase, Home } from 'lucide-react';
 
 export default function SearchPage() {
@@ -227,9 +228,11 @@ export default function SearchPage() {
                   <div className="flex items-start space-x-3">
                     <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                       {profile.photoUrl ? (
-                        <img
+                        <Image
                           src={profile.photoUrl}
                           alt={profile.firstName}
+                          width={48}
+                          height={48}
                           className="w-12 h-12 rounded-full object-cover"
                         />
                       ) : (

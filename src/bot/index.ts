@@ -1,4 +1,4 @@
-const TelegramBot = require('node-telegram-bot-api');
+import TelegramBot from 'node-telegram-bot-api';
 import { supabase } from '../lib/supabase';
 import { startCommand } from './commands/start';
 import { profileCommand } from './commands/profile';
@@ -16,19 +16,19 @@ if (!token) {
 const bot = new TelegramBot(token, { polling: true });
 
 // Обработчик команды /start
-bot.onText(/\/start/, (msg: any, match: RegExpExecArray | null) => startCommand(bot, msg.chat.id));
+bot.onText(/\/start/, (msg: TelegramBot.Message, match: RegExpExecArray | null) => startCommand(bot, msg.chat.id));
 
 // Обработчик команды /profile
-bot.onText(/\/profile/, (msg: any, match: RegExpExecArray | null) => profileCommand(bot, msg.chat.id));
+bot.onText(/\/profile/, (msg: TelegramBot.Message, match: RegExpExecArray | null) => profileCommand(bot, msg.chat.id));
 
 // Обработчик команды /search
-bot.onText(/\/search/, (msg: any, match: RegExpExecArray | null) => searchCommand(bot, msg.chat.id));
+bot.onText(/\/search/, (msg: TelegramBot.Message, match: RegExpExecArray | null) => searchCommand(bot, msg.chat.id));
 
 // Обработчик команды /help
-bot.onText(/\/help/, (msg: any, match: RegExpExecArray | null) => helpCommand(bot, msg.chat.id));
+bot.onText(/\/help/, (msg: TelegramBot.Message, match: RegExpExecArray | null) => helpCommand(bot, msg.chat.id));
 
 // Обработчик callback_query (для inline кнопок)
-bot.on('callback_query', async (callbackQuery: any) => {
+bot.on('callback_query', async (callbackQuery: TelegramBot.CallbackQuery) => {
   if (!callbackQuery.data) return;
 
   const chatId = callbackQuery.message?.chat.id;
@@ -72,7 +72,7 @@ bot.on('callback_query', async (callbackQuery: any) => {
 });
 
 // Обработчик текстовых сообщений
-bot.on('message', async (msg: any) => {
+bot.on('message', async (msg: TelegramBot.Message) => {
   if (msg.text && !msg.text.startsWith('/')) {
     // Обработка текстовых сообщений (для создания/редактирования профиля)
     await handleTextMessage(msg);
@@ -195,7 +195,7 @@ async function handleDeleteProfile(chatId: number) {
 }
 
 // Функция для обработки текстовых сообщений
-async function handleTextMessage(msg: any) {
+async function handleTextMessage(msg: TelegramBot.Message) {
   const chatId = msg.chat.id;
   const text = msg.text;
 

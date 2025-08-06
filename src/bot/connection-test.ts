@@ -1,7 +1,8 @@
-const dotenv = require('dotenv');
-dotenv.config({ path: '.env.local' });
+import dotenv from 'dotenv';
+import TelegramBot from 'node-telegram-bot-api';
+import { supabase } from '../lib/supabase';
 
-const TelegramBot = require('node-telegram-bot-api');
+dotenv.config({ path: '.env.local' });
 
 async function testBotConnection() {
   console.log('🤖 Тестирование подключения к Telegram Bot API...\n');
@@ -21,27 +22,14 @@ async function testBotConnection() {
     const botInfo = await bot.getMe();
     
     console.log('✅ Подключение к Telegram Bot API успешно!');
-    console.log(`📋 Информация о боте:`);
-    console.log(`   Имя: ${botInfo.first_name}`);
+    console.log(`   Имя бота: ${botInfo.first_name}`);
     console.log(`   Username: @${botInfo.username}`);
-    console.log(`   ID: ${botInfo.id}`);
-    console.log(`   Может присоединяться к группам: ${botInfo.can_join_groups ? 'Да' : 'Нет'}`);
-    console.log(`   Может читать сообщения: ${botInfo.can_read_all_group_messages ? 'Да' : 'Нет'}`);
-    console.log(`   Поддерживает inline режим: ${botInfo.supports_inline_queries ? 'Да' : 'Нет'}`);
+    console.log(`   ID бота: ${botInfo.id}`);
+    console.log(`   Язык: ${botInfo.language_code || 'Не указан'}`);
     
     return true;
-  } catch (error: any) {
-    console.error('❌ Ошибка подключения к Telegram Bot API:');
-    console.error(`   Код ошибки: ${error.code || 'Неизвестно'}`);
-    console.error(`   Сообщение: ${error.message || 'Неизвестно'}`);
-    
-    if (error.code === 401) {
-      console.error('💡 Возможно, токен бота неверный. Проверьте токен в .env.local');
-    } else if (error.code === 'ENOTFOUND') {
-      console.error('💡 Проблема с интернет-соединением');
-    }
-    
-    return false;
+  } catch (error: unknown) {
+    console.error('Error connecting to Telegram Bot:', error);
   }
 }
 
@@ -66,8 +54,8 @@ async function testWebAppUrl() {
     console.log(`   Порт: ${url.port || 'по умолчанию'}`);
     
     return true;
-  } catch (error: any) {
-    console.error('❌ Неверный формат URL:', error.message);
+  } catch (error: unknown) {
+    console.error('❌ Неверный формат URL:', error);
     return false;
   }
 }

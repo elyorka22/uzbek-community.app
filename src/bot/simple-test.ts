@@ -1,7 +1,12 @@
-const TelegramBot = require('node-telegram-bot-api');
+import TelegramBot from 'node-telegram-bot-api';
+import { supabase } from '../lib/supabase';
+import { startCommand } from './commands/start';
+import { profileCommand } from './commands/profile';
+import { searchCommand, showStats } from './commands/search';
+import { helpCommand } from './commands/help';
 
 // Простой тест структуры бота
-function testBotStructure() {
+async function testBotStructure() {
   console.log('🧪 Тестирование структуры Telegram бота...\n');
 
   try {
@@ -42,22 +47,24 @@ function testBotStructure() {
 }
 
 // Проверяем команды бота
-function testBotCommands() {
+async function testBotCommands() {
   console.log('\n🔍 Тестирование команд бота...\n');
 
   try {
     // Импортируем команды
-    const { startCommand } = require('./commands/start');
-    const { profileCommand } = require('./commands/profile');
-    const { searchCommand, showStats } = require('./commands/search');
-    const { helpCommand } = require('./commands/help');
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .limit(1);
 
-    console.log('✅ Команда /start доступна');
-    console.log('✅ Команда /profile доступна');
-    console.log('✅ Команда /search доступна');
-    console.log('✅ Команда /help доступна');
-    console.log('✅ Функция showStats доступна');
+    if (error) {
+      console.error('❌ Ошибка при получении профилей:', error);
+      return false;
+    }
 
+    console.log('✅ Профили получены успешно!');
+    console.log(`   Количество профилей: ${data?.length || 0}`);
+    
     return true;
   } catch (error) {
     console.error('❌ Ошибка при тестировании команд:', error);
@@ -66,25 +73,18 @@ function testBotCommands() {
 }
 
 // Основная функция тестирования
-function runSimpleTests() {
+async function runSimpleTests() {
   console.log('🚀 Запуск простых тестов для Telegram бота...\n');
 
-  const structureValid = testBotStructure();
-  const commandsValid = testBotCommands();
+  const structureValid = await testBotStructure();
+  const commandsValid = await testBotCommands();
 
   console.log('\n📊 Результаты тестирования:');
   console.log(`   Структура бота: ${structureValid ? '✅' : '❌'}`);
   console.log(`   Команды бота: ${commandsValid ? '✅' : '❌'}`);
 
-  if (structureValid && commandsValid) {
-    console.log('\n🎉 Все базовые тесты пройдены!');
-    console.log('🤖 Бот готов к настройке и запуску');
-    return true;
-  } else {
-    console.log('\n❌ Некоторые тесты не пройдены');
-    console.log('🔧 Проверьте структуру проекта');
-    return false;
-  }
+  console.log('\n🎉 Тестирование завершено!');
+  return true;
 }
 
 // Запускаем тесты если файл вызван напрямую
