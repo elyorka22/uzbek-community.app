@@ -46,59 +46,59 @@ export default function HomePage() {
 
   const mainFeatures = [
     {
-      title: 'Поиск друзей',
-      description: 'Найдите узбеков в вашем городе',
+      title: 'Do\'stlarni topish',
+      description: 'Shahringizdagi o\'zbeklarni toping',
       icon: Users,
       color: 'bg-blue-500',
       href: '/search',
-      badge: 'Популярно'
+      badge: 'Mashhur'
     },
     {
-      title: 'Мой профиль',
-      description: 'Создайте или обновите профиль',
+      title: 'Mening profilim',
+      description: 'Profil yarating yoki yangilang',
       icon: User,
       color: 'bg-green-500',
       href: '/profile'
     },
     {
-      title: 'Новичкам',
-      description: 'Гид по адаптации в новой стране',
+      title: 'Yangi kelganlar uchun',
+      description: 'Yangi mamlakatda moslashish bo\'yicha yo\'riqnoma',
       icon: GraduationCap,
       color: 'bg-purple-500',
       href: '/newcomers',
-      badge: 'Новое'
+      badge: 'Yangi'
     },
     {
-      title: 'Юристы',
-      description: 'Найдите юристов-узбеков',
+      title: 'Huquqshunoslar',
+      description: 'O\'zbek huquqshunoslarini toping',
       icon: Building2,
       color: 'bg-orange-500',
       href: '/lawyers'
     },
     {
-      title: 'Халял магазины',
-      description: 'Карта халял магазинов',
+      title: 'Halol do\'konlar',
+      description: 'Halol do\'konlar xaritasi',
       icon: ShoppingBag,
       color: 'bg-emerald-500',
       href: '/halal-shops'
     },
     {
-      title: 'Работа',
-      description: 'Вакансии и поиск работы',
+      title: 'Ish',
+      description: 'Vakansiyalar va ish qidirish',
       icon: Briefcase,
       color: 'bg-indigo-500',
       href: '/jobs'
     },
     {
-      title: 'Жилье',
-      description: 'Поиск квартир и комнат',
+      title: 'Uy-joy',
+      description: 'Kvartira va xonalar qidirish',
       icon: Home,
       color: 'bg-pink-500',
       href: '/housing'
     },
     {
-      title: 'События',
-      description: 'Мероприятия сообщества',
+      title: 'Tadbirlar',
+      description: 'Jamiyat tadbirlari',
       icon: Calendar,
       color: 'bg-red-500',
       href: '/events'
@@ -107,20 +107,20 @@ export default function HomePage() {
 
   const quickActions = [
     {
-      title: 'Определить местоположение',
-      description: 'Автоматически заполнить город',
+      title: 'Manzilni aniqlash',
+      description: 'Shaharni avtomatik to\'ldirish',
       icon: MapPin,
       action: 'location'
     },
     {
-      title: 'Написать в чат',
-      description: 'Общий чат сообщества',
+      title: 'Chatga yozish',
+      description: 'Jamiyat umumiy chati',
       icon: MessageCircle,
       action: 'chat'
     },
     {
-      title: 'Помощь',
-      description: 'FAQ и поддержка',
+      title: 'Yordam',
+      description: 'FAQ va qo\'llab-quvvatlash',
       icon: FileText,
       action: 'help'
     }
@@ -149,14 +149,14 @@ export default function HomePage() {
               </div>
             </div>
             <h1 className="text-3xl font-bold mb-2">
-              Uzbek Community
+              O'zbek Jamiyati
             </h1>
             <p className="text-blue-100">
-              Все необходимое для узбеков за границей
+              Chet eldagi o'zbeklar uchun hamma narsa
             </p>
             {telegramUser && (
               <p className="text-sm text-blue-200 mt-2">
-                Привет, {telegramUser.first_name}! 👋
+                Salom, {telegramUser.first_name}! 👋
               </p>
             )}
           </div>
@@ -167,7 +167,7 @@ export default function HomePage() {
         {/* Основные функции */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Основные функции
+            Asosiy funksiyalar
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {mainFeatures.map((feature, index) => {
@@ -197,7 +197,7 @@ export default function HomePage() {
                         {feature.description}
                       </p>
                       <div className="flex items-center text-blue-500 text-sm font-medium">
-                        <span>Открыть</span>
+                        <span>Ochish</span>
                         <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
@@ -211,7 +211,7 @@ export default function HomePage() {
         {/* Быстрые действия */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Быстрые действия
+            Tezkor harakatlar
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {quickActions.map((action, index) => {
@@ -252,34 +252,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Статистика */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-6">
-            Наша статистика
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div>
-              <div className="text-2xl font-bold text-blue-500 mb-1">1000+</div>
-              <div className="text-gray-600 text-sm">Пользователей</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-green-500 mb-1">50+</div>
-              <div className="text-gray-600 text-sm">Стран</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-purple-500 mb-1">100+</div>
-              <div className="text-gray-600 text-sm">Групп</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-orange-500 mb-1">5000+</div>
-              <div className="text-gray-600 text-sm">Связей</div>
-            </div>
-          </div>
-        </div>
-
         {/* Футер */}
         <div className="text-center text-gray-500 text-sm">
-          <p>&copy; 2024 Uzbek Community. Все права защищены.</p>
+          <p>&copy; 2024 O'zbek Jamiyati. Barcha huquqlar himoyalangan.</p>
         </div>
       </div>
     </div>

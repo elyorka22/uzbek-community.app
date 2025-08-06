@@ -224,10 +224,10 @@ export default function ProfilePage() {
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-3 mb-4">
             <User className="w-6 h-6 text-blue-500" />
-            <h1 className="text-2xl font-bold text-gray-900">Мой профиль</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Mening profilim</h1>
           </div>
           <p className="text-gray-600">
-            Расскажите о себе, чтобы другие узбеки могли вас найти
+            O\'zingiz haqida gapirib bering, boshqa o\'zbeklar sizni topa olishi uchun
           </p>
         </div>
 

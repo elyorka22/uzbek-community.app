@@ -98,10 +98,10 @@ export default function SearchPage() {
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-3 mb-4">
             <Search className="w-6 h-6 text-blue-500" />
-            <h1 className="text-2xl font-bold text-gray-900">Поиск узбеков</h1>
+            <h1 className="text-2xl font-bold text-gray-900">O'zbeklarni qidirish</h1>
           </div>
           <p className="text-gray-600">
-            Найдите других узбеков по локации, статусу и интересам
+            Manzil, holat va qiziqishlar bo'yicha boshqa o'zbeklarni toping
           </p>
         </div>
 
