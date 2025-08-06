@@ -6,6 +6,7 @@ import { useProfiles } from '@/hooks/useProfiles';
 import { UserStatus } from '@/types/user';
 import { Search, MapPin, Users, Filter, User, GraduationCap, Briefcase, Home } from 'lucide-react';
 import { initTelegramApp } from '@/lib/telegram';
+import BackButton from '@/components/BackButton';
 
 export default function SearchPage() {
   const [filters, setFilters] = useState({
@@ -87,7 +88,12 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-6">
-      <div className="max-w-6xl mx-auto px-4 md:ml-64">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Кнопка назад */}
+        <div className="mb-4">
+          <BackButton href="/" />
+        </div>
+
         {/* Заголовок */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-3 mb-4">

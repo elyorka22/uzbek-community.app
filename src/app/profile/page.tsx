@@ -8,6 +8,7 @@ import InterestsSelector from '@/components/InterestsSelector';
 import { Save, User, MapPin, GraduationCap, Briefcase, Home, Users, AlertCircle } from 'lucide-react';
 import { initTelegramApp, getValidatedTelegramUser, autoRegisterUser } from '@/lib/telegram';
 import LocationDetector from '@/components/LocationDetector';
+import BackButton from '@/components/BackButton';
 
 export default function ProfilePage() {
   const [telegramUser, setTelegramUser] = useState<{
@@ -213,7 +214,12 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-6">
-      <div className="max-w-2xl mx-auto px-4 md:ml-64">
+      <div className="max-w-2xl mx-auto px-4">
+        {/* Кнопка назад */}
+        <div className="mb-4">
+          <BackButton href="/" />
+        </div>
+
         {/* Заголовок */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-3 mb-4">

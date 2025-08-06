@@ -141,7 +141,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-gray-50">
       {/* Заголовок */}
       <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-        <div className="max-w-4xl mx-auto px-4 py-8 md:ml-64">
+        <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="text-center">
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
@@ -163,7 +163,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-6 md:ml-64">
+      <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Основные функции */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import TelegramInit from "@/components/TelegramInit";
-import Navigation from "@/components/Navigation";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -47,7 +46,6 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
         <TelegramInit />
-        <Navigation />
         <div id="root">
           {children}
         </div>
