@@ -242,16 +242,6 @@ async function handleTextMessage(msg: TelegramBot.Message) {
   await bot!.sendMessage(chatId, 'Используйте команды бота или кнопки для навигации.');
 }
 
-// Обработчик ошибок
-bot?.on('error', (error: Error) => {
-  console.error('Bot error:', error);
-});
-
-// Обработчик polling_error
-bot?.on('polling_error', (error: Error) => {
-  console.error('Polling error:', error);
-});
-
 console.log('Telegram bot is running...');
 
 export default bot; 
