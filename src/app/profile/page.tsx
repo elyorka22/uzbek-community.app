@@ -2,11 +2,25 @@
 
 import { useState, useEffect } from 'react';
 import { UserProfile, UserStatus } from '@/types/user';
-import { initTelegramApp, getTelegramUser } from '@/lib/telegram';
 import { useProfile } from '@/hooks/useProfiles';
 import ImageUpload from '@/components/ImageUpload';
 import InterestsSelector from '@/components/InterestsSelector';
 import { Save, User, MapPin, GraduationCap, Briefcase, Home, Users, AlertCircle } from 'lucide-react';
+
+// Динамический импорт для избежания ошибок на сервере
+const getTelegramUser = () => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  
+  try {
+    const { getTelegramUser: getUser } = require('@/lib/telegram');
+    return getUser();
+  } catch (error) {
+    console.warn('Telegram Web App not available');
+    return null;
+  }
+};
 
 export default function ProfilePage() {
   const [telegramUser, setTelegramUser] = useState<{

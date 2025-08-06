@@ -1,53 +1,71 @@
-import WebApp from '@twa-dev/sdk';
+// Динамический импорт для избежания ошибок на сервере
+let WebApp: any = null;
 
-export const initTelegramApp = () => {
-  // Проверяем, что мы на клиенте
+const getWebApp = () => {
   if (typeof window === 'undefined') {
     return null;
   }
-
-  // Инициализация Telegram Web App
-  WebApp.ready();
   
-  // Настройка темы
-  WebApp.setHeaderColor('#ffffff');
-  WebApp.setBackgroundColor('#ffffff');
+  if (!WebApp) {
+    try {
+      WebApp = require('@twa-dev/sdk');
+    } catch (error) {
+      console.warn('Telegram Web App SDK not available');
+      return null;
+    }
+  }
   
   return WebApp;
 };
 
-export const getTelegramUser = () => {
-  // Проверяем, что мы на клиенте
-  if (typeof window === 'undefined') {
+export const initTelegramApp = () => {
+  const webApp = getWebApp();
+  if (!webApp) {
     return null;
   }
 
-  return WebApp.initDataUnsafe?.user;
+  // Инициализация Telegram Web App
+  webApp.ready();
+  
+  // Настройка темы
+  webApp.setHeaderColor('#ffffff');
+  webApp.setBackgroundColor('#ffffff');
+  
+  return webApp;
+};
+
+export const getTelegramUser = () => {
+  const webApp = getWebApp();
+  if (!webApp) {
+    return null;
+  }
+
+  return webApp.initDataUnsafe?.user;
 };
 
 export const getTelegramTheme = () => {
-  // Проверяем, что мы на клиенте
-  if (typeof window === 'undefined') {
+  const webApp = getWebApp();
+  if (!webApp) {
     return 'light';
   }
 
-  return WebApp.colorScheme; // 'light' | 'dark'
+  return webApp.colorScheme; // 'light' | 'dark'
 };
 
 export const showTelegramAlert = (message: string) => {
-  // Проверяем, что мы на клиенте
-  if (typeof window === 'undefined') {
+  const webApp = getWebApp();
+  if (!webApp) {
     return;
   }
 
-  WebApp.showAlert(message);
+  webApp.showAlert(message);
 };
 
 export const showTelegramConfirm = (message: string, callback: (confirmed: boolean) => void) => {
-  // Проверяем, что мы на клиенте
-  if (typeof window === 'undefined') {
+  const webApp = getWebApp();
+  if (!webApp) {
     return;
   }
 
-  WebApp.showConfirm(message, callback);
+  webApp.showConfirm(message, callback);
 }; 
