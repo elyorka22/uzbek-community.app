@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import bot from './index';
+import http from 'http';
 
 // Загружаем переменные окружения (только для локальной разработки)
 if (process.env.NODE_ENV !== 'production') {
@@ -36,13 +37,27 @@ if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_A
 
 console.log('🚀 Бот запущен и готов к работе!');
 
+// Создаем простой HTTP сервер для Railway
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Telegram Bot is running!');
+});
+
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, () => {
+  console.log(`🌐 HTTP сервер запущен на порту ${PORT}`);
+});
+
 // Обработчик завершения работы
 process.on('SIGINT', () => {
   console.log('\n🛑 Остановка бота...');
   if (bot) {
     bot.stopPolling();
   }
-  process.exit(0);
+  server.close(() => {
+    console.log('HTTP сервер остановлен');
+    process.exit(0);
+  });
 });
 
 process.on('SIGTERM', () => {
@@ -50,5 +65,8 @@ process.on('SIGTERM', () => {
   if (bot) {
     bot.stopPolling();
   }
-  process.exit(0);
+  server.close(() => {
+    console.log('HTTP сервер остановлен');
+    process.exit(0);
+  });
 }); 
