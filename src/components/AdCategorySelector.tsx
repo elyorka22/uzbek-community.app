@@ -54,22 +54,22 @@ export default function AdCategorySelector({ onClose, onSelectCategory, country 
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl border max-w-md w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-md w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="border-b border-gray-200 bg-gray-50 rounded-t-xl p-6">
+        <div className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 rounded-t-xl p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <Plus className="w-6 h-6 text-blue-500" />
-              <h2 className="text-xl font-bold text-gray-900">E&apos;lon qo&apos;shish</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">E&apos;lon qo&apos;shish</h2>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-lg"
+              className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 transition-colors p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-600 dark:text-gray-400 text-sm">
             Qanday turdagi e&apos;lon qo&apos;shmoqchisiz?
           </p>
         </div>
@@ -84,8 +84,8 @@ export default function AdCategorySelector({ onClose, onSelectCategory, country 
                 onClick={() => handleCategorySelect(category.type)}
                 className={`w-full p-4 rounded-lg border-2 transition-all duration-200 hover:shadow-md ${
                   selectedCategory === category.type
-                    ? `border-${category.color}-500 bg-${category.color}-50`
-                    : 'border-gray-200 bg-white hover:border-gray-300'
+                    ? `border-${category.color}-500 bg-${category.color}-50 dark:bg-${category.color}-900/20`
+                    : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
                 <div className="flex items-center space-x-4">
@@ -93,8 +93,8 @@ export default function AdCategorySelector({ onClose, onSelectCategory, country 
                     <Icon className="w-6 h-6" />
                   </div>
                   <div className="flex-1 text-left">
-                    <h3 className="font-semibold text-gray-900">{category.title}</h3>
-                    <p className="text-sm text-gray-600">{category.description}</p>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">{category.title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{category.description}</p>
                   </div>
                 </div>
               </button>
@@ -103,10 +103,10 @@ export default function AdCategorySelector({ onClose, onSelectCategory, country 
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-6">
+        <div className="border-t border-gray-200 dark:border-gray-700 p-6">
           <button
             onClick={onClose}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-gray-700"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
           >
             Bekor qilish
           </button>

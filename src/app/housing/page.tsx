@@ -234,17 +234,17 @@ function HousingPageContent() {
 
   if (!isInitialized) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Yuklanmoqda...</p>
+          <p className="text-gray-600 dark:text-gray-400">Yuklanmoqda...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-6">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-4">
           <BackButton href={countryParam ? `/?country=${countryParam}` : '/'} />
@@ -268,7 +268,7 @@ function HousingPageContent() {
         </div>
 
         {/* Поиск и фильтры */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -277,13 +277,13 @@ function HousingPageContent() {
                 placeholder="Qidirish..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
             <select
               value={selectedCity}
               onChange={(e) => setSelectedCity(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               {cities.map((city, index) => (
                 <option key={index} value={city}>{city}</option>
@@ -292,7 +292,7 @@ function HousingPageContent() {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               {propertyTypes.map((type, index) => (
                 <option key={index} value={type}>{type}</option>
@@ -301,7 +301,7 @@ function HousingPageContent() {
             <select
               value={priceRange}
               onChange={(e) => setPriceRange(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             >
               {priceRanges.map((range, index) => (
                 <option key={index} value={range}>{range}</option>
@@ -313,36 +313,36 @@ function HousingPageContent() {
         {/* Список объявлений */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredListings.map((listing) => (
-            <div key={listing.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div key={listing.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
               <div className="relative">
-                <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                  <Home className="w-16 h-16 text-gray-400" />
+                <div className="w-full h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                  <Home className="w-16 h-16 text-gray-400 dark:text-gray-500" />
                 </div>
                 <div className="absolute top-2 right-2">
-                  <div className="flex items-center space-x-1 bg-white/90 px-2 py-1 rounded-full">
+                  <div className="flex items-center space-x-1 bg-white/90 dark:bg-gray-800/90 px-2 py-1 rounded-full">
                     <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="text-sm font-medium">{listing.rating}</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">{listing.rating}</span>
                   </div>
                 </div>
               </div>
               
               <div className="p-6">
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-900">{listing.title}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{listing.title}</h3>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-pink-600">{listing.price}</p>
-                    <p className="text-sm text-gray-500">oyiga</p>
+                    <p className="text-2xl font-bold text-pink-600 dark:text-pink-400">{listing.price}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">oyiga</p>
                   </div>
                 </div>
                 
-                <p className="text-gray-600 text-sm mb-4">{listing.description}</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">{listing.description}</p>
                 
                 <div className="space-y-2 mb-4">
-                  <div className="flex items-center space-x-2 text-sm text-gray-700">
+                  <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
                     <MapPin className="w-4 h-4 text-gray-400" />
                     <span>{listing.address}</span>
                   </div>
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+                  <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                     <div className="flex items-center space-x-1">
                       <Users className="w-4 h-4" />
                       <span>{listing.rooms} xona</span>
@@ -355,12 +355,12 @@ function HousingPageContent() {
                 </div>
 
                 <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">Xususiyatlar:</h4>
+                  <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-2">Xususiyatlar:</h4>
                   <div className="flex flex-wrap gap-1">
                     {listing.features.map((feature, index) => (
                       <span
                         key={index}
-                        className="px-2 py-1 bg-pink-100 text-pink-700 text-xs rounded-full"
+                        className="px-2 py-1 bg-pink-100 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 text-xs rounded-full"
                       >
                         {feature}
                       </span>
@@ -368,12 +368,12 @@ function HousingPageContent() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
                   <div className="flex items-center space-x-1">
                     <Calendar className="w-4 h-4" />
                     <span>{formatDate(listing.postedDate)}</span>
                   </div>
-                  <span className="px-2 py-1 bg-gray-100 rounded-full text-xs">
+                  <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-xs text-gray-700 dark:text-gray-300">
                     {listing.type}
                   </span>
                 </div>
@@ -401,9 +401,9 @@ function HousingPageContent() {
 
         {filteredListings.length === 0 && (
           <div className="text-center py-12">
-            <Home className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Uy-joy topilmadi</h3>
-            <p className="text-gray-600">Boshqa qidiruv so'zlari yoki filtrlarni sinab ko'ring</p>
+            <Home className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Uy-joy topilmadi</h3>
+            <p className="text-gray-600 dark:text-gray-400">Boshqa qidiruv so'zlari yoki filtrlarni sinab ko'ring</p>
           </div>
         )}
       </div>
@@ -414,10 +414,10 @@ function HousingPageContent() {
 export default function HousingPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Yuklanmoqda...</p>
+          <p className="text-gray-600 dark:text-gray-400">Yuklanmoqda...</p>
         </div>
       </div>
     }>

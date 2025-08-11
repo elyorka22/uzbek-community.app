@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import TelegramInit from "@/components/TelegramInit";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -39,16 +40,18 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Uzbek Community" />
         <meta name="theme-color" content="#3B82F6" />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors`}>
         {/* Telegram Web App скрипт */}
         <Script 
           src="https://telegram.org/js/telegram-web-app.js" 
           strategy="beforeInteractive"
         />
-        <TelegramInit />
-        <div id="root">
-          {children}
-        </div>
+        <ThemeProvider>
+          <TelegramInit />
+          <div id="root">
+            {children}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

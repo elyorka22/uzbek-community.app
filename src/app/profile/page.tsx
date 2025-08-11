@@ -134,10 +134,10 @@ function ProfilePageContent() {
   // Показываем загрузку только если еще не инициализированы
   if (!isInitialized) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Инициализация приложения...</p>
+          <p className="text-gray-600 dark:text-gray-400">Инициализация приложения...</p>
         </div>
       </div>
     );
@@ -146,10 +146,10 @@ function ProfilePageContent() {
   // Показываем загрузку профиля только если есть telegramId
   if (loading && telegramUser?.id) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Загрузка профиля...</p>
+          <p className="text-gray-600 dark:text-gray-400">Загрузка профиля...</p>
         </div>
       </div>
     );
@@ -158,10 +158,10 @@ function ProfilePageContent() {
   // Показываем ошибку только если есть telegramId
   if (error && telegramUser?.id) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <p className="text-red-600">Ошибка загрузки профиля: {error}</p>
+          <p className="text-red-600 dark:text-red-400">Ошибка загрузки профиля: {error}</p>
         </div>
       </div>
     );
@@ -170,10 +170,10 @@ function ProfilePageContent() {
   // Если нет пользователя Telegram, показываем сообщение
   if (!telegramUser) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <p className="text-red-600">Приложение должно быть открыто через Telegram</p>
+          <p className="text-red-600 dark:text-red-400">Приложение должно быть открыто через Telegram</p>
         </div>
       </div>
     );
@@ -256,7 +256,7 @@ function ProfilePageContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-6">
       <div className="max-w-2xl mx-auto px-4">
         {/* Кнопка назад */}
         <div className="mb-4">
@@ -264,14 +264,14 @@ function ProfilePageContent() {
         </div>
 
         {/* Заголовок */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <User className="w-6 h-6 text-blue-500" />
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Mening profilim</h1>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Mening profilim</h1>
                 {countryParam && (
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     {getCountryName(countryParam)}dagi profil
                   </p>
                 )}
@@ -285,13 +285,13 @@ function ProfilePageContent() {
               <span>E&apos;lon qo&apos;shish</span>
             </button>
           </div>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             O&apos;zingiz haqida gapirib bering, boshqa o&apos;zbeklar sizni topa olishi uchun
           </p>
         </div>
 
         {/* Форма профиля */}
-        <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 space-y-6">
           {/* Фото профиля */}
           <div className="flex justify-center">
             <ImageUpload
@@ -303,28 +303,28 @@ function ProfilePageContent() {
           {/* Основная информация */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Имя *
               </label>
               <input
                 type="text"
                 value={formData.firstName}
                 onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="Ваше имя"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Фамилия
               </label>
               <input
                 type="text"
                 value={formData.lastName || ''}
                 onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="Ваша фамилия"
               />
             </div>
@@ -333,12 +333,12 @@ function ProfilePageContent() {
           {/* Локация */}
           <div className="flex items-center space-x-3 mb-4">
             <MapPin className="w-5 h-5 text-gray-400" />
-            <h3 className="text-lg font-medium text-gray-900">Локация</h3>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Локация</h3>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Страна *
               </label>
               <input
@@ -348,14 +348,14 @@ function ProfilePageContent() {
                   ...prev,
                   location: { ...prev.location, country: e.target.value }
                 }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="Страна"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Город *
               </label>
               <input
@@ -365,7 +365,7 @@ function ProfilePageContent() {
                   ...prev,
                   location: { ...prev.location, city: e.target.value }
                 }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="Город"
                 required
               />
@@ -374,7 +374,7 @@ function ProfilePageContent() {
 
           {/* Статус */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
               Ваш статус *
             </label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -386,8 +386,8 @@ function ProfilePageContent() {
                     onClick={() => setFormData(prev => ({ ...prev, status: option.value as UserStatus }))}
                     className={`flex flex-col items-center p-4 rounded-lg border transition-colors ${
                       formData.status === option.value
-                        ? 'bg-blue-50 border-blue-500 text-blue-700'
-                        : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                        ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500 text-blue-700 dark:text-blue-300'
+                        : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
                     }`}
                   >
                     <Icon className="w-6 h-6 mb-2" />
@@ -400,14 +400,14 @@ function ProfilePageContent() {
 
           {/* О себе */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               О себе
             </label>
             <textarea
               value={formData.bio || ''}
               onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
               placeholder="Расскажите немного о себе..."
             />
           </div>
@@ -436,10 +436,10 @@ function ProfilePageContent() {
 
           {/* Ошибка сохранения */}
           {saveError && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
               <div className="flex items-center space-x-2">
                 <AlertCircle className="w-5 h-5 text-red-500" />
-                <span className="text-red-700">{saveError}</span>
+                <span className="text-red-700 dark:text-red-400">{saveError}</span>
               </div>
             </div>
           )}
@@ -451,7 +451,7 @@ function ProfilePageContent() {
               disabled={isLoading || !formData.firstName || !formData.location.country || !formData.location.city}
               className={`flex items-center space-x-2 px-8 py-3 rounded-lg font-medium transition-colors ${
                 isLoading || !formData.firstName || !formData.location.country || !formData.location.city
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                   : 'bg-blue-500 text-white hover:bg-blue-600'
               }`}
             >
@@ -462,7 +462,7 @@ function ProfilePageContent() {
 
           {/* Уведомление о сохранении */}
           {isSaved && (
-            <div className="text-center text-green-600 font-medium">
+            <div className="text-center text-green-600 dark:text-green-400 font-medium">
               Профиль успешно {profile ? 'обновлен' : 'создан'}!
             </div>
           )}
@@ -491,10 +491,10 @@ function ProfilePageContent() {
 export default function ProfilePage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Yuklanmoqda...</p>
+          <p className="text-gray-600 dark:text-gray-400">Yuklanmoqda...</p>
         </div>
       </div>
     }>
