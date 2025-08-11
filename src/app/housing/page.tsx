@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { Home, MapPin, Users, Square, Search, Phone, Mail, Calendar, Star, Plus } from 'lucide-react';
+import { Home, MapPin, Users, Square, Search, Phone, Mail, Calendar, Star } from 'lucide-react';
 import { initTelegramApp } from '@/lib/telegram';
 import BackButton from '@/components/BackButton';
-import AdForm from '@/components/AdForm';
 import { useSearchParams } from 'next/navigation';
 
 function HousingPageContent() {
@@ -16,7 +15,6 @@ function HousingPageContent() {
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedType, setSelectedType] = useState('');
   const [priceRange, setPriceRange] = useState('');
-  const [showAdForm, setShowAdForm] = useState(false);
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -253,25 +251,16 @@ function HousingPageContent() {
         </div>
 
         <div className="bg-gradient-to-r from-pink-500 to-rose-600 text-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-3">
-              <Home className="w-8 h-8" />
-              <div>
-                <h1 className="text-3xl font-bold">Uy-joy va kvartiralar</h1>
-                {countryParam && (
-                  <p className="text-sm text-pink-200">
-                    {getCountryName(countryParam)}dagi uy-joy takliflari
-                  </p>
-                )}
-              </div>
+          <div className="flex items-center space-x-3 mb-4">
+            <Home className="w-8 h-8" />
+            <div>
+              <h1 className="text-3xl font-bold">Uy-joy va kvartiralar</h1>
+              {countryParam && (
+                <p className="text-sm text-pink-200">
+                  {getCountryName(countryParam)}dagi uy-joy takliflari
+                </p>
+              )}
             </div>
-            <button
-              onClick={() => setShowAdForm(true)}
-              className="bg-white text-pink-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200 shadow-sm hover:shadow-md flex items-center space-x-2 font-medium text-sm"
-            >
-              <Plus className="w-4 h-4" />
-              <span>E&apos;lon qo&apos;shish</span>
-            </button>
           </div>
           <p className="text-pink-100">
             Shahringizdagi uy-joy va kvartira takliflari
@@ -416,14 +405,6 @@ function HousingPageContent() {
             <h3 className="text-lg font-medium text-gray-900 mb-2">Uy-joy topilmadi</h3>
             <p className="text-gray-600">Boshqa qidiruv so'zlari yoki filtrlarni sinab ko'ring</p>
           </div>
-        )}
-
-        {showAdForm && (
-          <AdForm
-            type="housing"
-            onClose={() => setShowAdForm(false)}
-            country={countryParam || ''}
-          />
         )}
       </div>
     </div>

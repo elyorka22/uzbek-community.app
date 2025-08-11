@@ -5,10 +5,12 @@ import { UserProfile, UserStatus } from '@/types/user';
 import { useProfile } from '@/hooks/useProfiles';
 import ImageUpload from '@/components/ImageUpload';
 import InterestsSelector from '@/components/InterestsSelector';
-import { Save, User, MapPin, GraduationCap, Briefcase, Home, Users, AlertCircle } from 'lucide-react';
+import { Save, User, MapPin, GraduationCap, Briefcase, Home, Users, AlertCircle, Plus } from 'lucide-react';
 import { initTelegramApp, getValidatedTelegramUser, autoRegisterUser } from '@/lib/telegram';
 import LocationDetector from '@/components/LocationDetector';
 import BackButton from '@/components/BackButton';
+import AdCategorySelector from '@/components/AdCategorySelector';
+import AdForm from '@/components/AdForm';
 import { useSearchParams } from 'next/navigation';
 
 function ProfilePageContent() {
@@ -26,6 +28,9 @@ function ProfilePageContent() {
   const [isSaved, setIsSaved] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [showCategorySelector, setShowCategorySelector] = useState(false);
+  const [showAdForm, setShowAdForm] = useState(false);
+  const [selectedAdType, setSelectedAdType] = useState<'job' | 'housing' | 'lawyer' | 'shop'>('job');
 
   // Инициализация Telegram Web App
   useEffect(() => {
@@ -232,6 +237,17 @@ function ProfilePageContent() {
     }
   };
 
+  const handleCategorySelect = (type: 'job' | 'housing' | 'lawyer' | 'shop') => {
+    setSelectedAdType(type);
+    setShowCategorySelector(false);
+    setShowAdForm(true);
+  };
+
+  const handleCloseAdForm = () => {
+    setShowAdForm(false);
+    setSelectedAdType('job');
+  };
+
   const statusOptions = [
     { value: 'student', label: 'Студент', icon: GraduationCap },
     { value: 'working', label: 'Работаю', icon: Briefcase },
@@ -249,19 +265,28 @@ function ProfilePageContent() {
 
         {/* Заголовок */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <User className="w-6 h-6 text-blue-500" />
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Mening profilim</h1>
-              {countryParam && (
-                <p className="text-sm text-gray-600">
-                  {getCountryName(countryParam)}dagi profil
-                </p>
-              )}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <User className="w-6 h-6 text-blue-500" />
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Mening profilim</h1>
+                {countryParam && (
+                  <p className="text-sm text-gray-600">
+                    {getCountryName(countryParam)}dagi profil
+                  </p>
+                )}
+              </div>
             </div>
+            <button
+              onClick={() => setShowCategorySelector(true)}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-sm hover:shadow-md flex items-center space-x-2 font-medium text-sm"
+            >
+              <Plus className="w-4 h-4" />
+              <span>E&apos;lon qo&apos;shish</span>
+            </button>
           </div>
           <p className="text-gray-600">
-            O\'zingiz haqida gapirib bering, boshqa o\'zbeklar sizni topa olishi uchun
+            O&apos;zingiz haqida gapirib bering, boshqa o&apos;zbeklar sizni topa olishi uchun
           </p>
         </div>
 
@@ -442,6 +467,22 @@ function ProfilePageContent() {
             </div>
           )}
         </div>
+
+        {showCategorySelector && (
+          <AdCategorySelector
+            onClose={() => setShowCategorySelector(false)}
+            onSelectCategory={handleCategorySelect}
+            country={countryParam || ''}
+          />
+        )}
+
+        {showAdForm && selectedAdType && (
+          <AdForm
+            type={selectedAdType}
+            onClose={handleCloseAdForm}
+            country={countryParam || ''}
+          />
+        )}
       </div>
     </div>
   );
