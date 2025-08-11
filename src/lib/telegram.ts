@@ -1,126 +1,130 @@
-// Динамический импорт для избежания ошибок на сервере
-let WebApp: any = null;
+interface TelegramUser {
+  id: number;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  photo_url?: string;
+}
 
-const getWebApp = () => {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-  
-  if (!WebApp) {
-    try {
-      // Используем стандартный Telegram Web App API
-      WebApp = (window as any).Telegram?.WebApp;
-      if (!WebApp) {
-        console.warn('Telegram Web App not available');
-        return null;
-      }
-    } catch (error) {
-      console.warn('Telegram Web App SDK not available');
-      return null;
-    }
-  }
-  
-  return WebApp;
-};
+interface TelegramWebApp {
+  initData: string;
+  initDataUnsafe: {
+    user?: TelegramUser;
+    query_id?: string;
+  };
+  ready(): void;
+  expand(): void;
+  close(): void;
+  MainButton: {
+    text: string;
+    color: string;
+    textColor: string;
+    isVisible: boolean;
+    isActive: boolean;
+    show(): void;
+    hide(): void;
+    enable(): void;
+    disable(): void;
+    onClick(callback: () => void): void;
+    offClick(callback: () => void): void;
+  };
+  BackButton: {
+    isVisible: boolean;
+    show(): void;
+    hide(): void;
+    onClick(callback: () => void): void;
+    offClick(callback: () => void): void;
+  };
+}
 
-export const initTelegramApp = () => {
-  const webApp = getWebApp();
-  if (!webApp) {
-    console.warn('Telegram Web App not initialized');
-    return null;
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp: TelegramWebApp;
+    };
   }
+}
 
+export function initTelegramApp(): void {
   try {
-    // Инициализация Telegram Web App
-    webApp.ready();
-    
-    // Настройка темы
-    webApp.setHeaderColor('#3B82F6'); // Синий цвет
-    webApp.setBackgroundColor('#ffffff');
-    
-    // Расширяем на всю высоту
-    webApp.expand();
-    
-    console.log('Telegram Web App initialized successfully');
-    return webApp;
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+    }
   } catch (error) {
     console.error('Error initializing Telegram Web App:', error);
+  }
+}
+
+export function getValidatedTelegramUser(): TelegramUser | null {
+  try {
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp?.initDataUnsafe?.user) {
+      return window.Telegram.WebApp.initDataUnsafe.user;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error getting Telegram user:', error);
     return null;
   }
-};
+}
 
-export const getTelegramUser = () => {
-  const webApp = getWebApp();
-  if (!webApp) {
-    return null;
-  }
+export async function autoRegisterUser(user: TelegramUser): Promise<boolean> {
+  try {
+    const response = await fetch('/api/profiles', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        telegram_id: user.id,
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
+        username: user.username || '',
+        photo_url: user.photo_url || '',
+        country: '',
+        city: '',
+        status: 'other',
+        interests: [],
+        bio: ''
+      }),
+    });
 
-  return webApp.initDataUnsafe?.user;
-};
-
-export const getTelegramTheme = () => {
-  const webApp = getWebApp();
-  if (!webApp) {
-    return 'light';
-  }
-
-  return webApp.colorScheme; // 'light' | 'dark'
-};
-
-export const showTelegramAlert = (message: string) => {
-  const webApp = getWebApp();
-  if (!webApp) {
-    return;
-  }
-
-  webApp.showAlert(message);
-};
-
-export const showTelegramConfirm = (message: string, callback: (confirmed: boolean) => void) => {
-  const webApp = getWebApp();
-  if (!webApp) {
-    return;
-  }
-
-  webApp.showConfirm(message, callback);
-};
-
-// Функция для получения геолокации
-export const requestLocation = (): Promise<{
-  latitude: number;
-  longitude: number;
-  accuracy: number;
-} | null> => {
-  return new Promise((resolve) => {
-    const webApp = getWebApp();
-    if (!webApp) {
-      console.warn('Telegram Web App not available for location');
-      resolve(null);
-      return;
+    if (!response.ok) {
+      throw new Error('Failed to register user');
     }
 
-    try {
-      webApp.requestLocation((location: any) => {
-        console.log('Location received:', location);
-        resolve({
-          latitude: location.latitude,
-          longitude: location.longitude,
-          accuracy: location.accuracy
-        });
-      });
-    } catch (error) {
-      console.error('Error requesting location:', error);
-      resolve(null);
-    }
-  });
-};
+    return true;
+  } catch (error) {
+    console.error('Error auto-registering user:', error);
+    return false;
+  }
+}
 
-// Функция для получения города по координатам
-export const getCityByCoordinates = async (latitude: number, longitude: number): Promise<{
+// Функция для автоматического определения местоположения
+export async function autoDetectLocation(): Promise<{
   city: string;
   country: string;
-} | null> => {
+  coordinates?: { latitude: number; longitude: number };
+} | null> {
   try {
+    // Проверяем доступность геолокации
+    if (!navigator.geolocation) {
+      console.warn('Geolocation not supported');
+      return null;
+    }
+
+    // Получаем текущую позицию
+    const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000
+      });
+    });
+
+    const { latitude, longitude } = position.coords;
+
+    // Получаем город и страну по координатам через Nominatim API
     const response = await fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`
     );
@@ -133,113 +137,14 @@ export const getCityByCoordinates = async (latitude: number, longitude: number):
     
     return {
       city: data.address?.city || data.address?.town || data.address?.village || 'Неизвестно',
-      country: data.address?.country || 'Неизвестно'
-    };
-  } catch (error) {
-    console.error('Error getting city by coordinates:', error);
-    return null;
-  }
-};
-
-// Функция для автоматического определения местоположения
-export const autoDetectLocation = async (): Promise<{
-  city: string;
-  country: string;
-  coordinates?: { latitude: number; longitude: number };
-} | null> => {
-  try {
-    // Запрашиваем геолокацию
-    const location = await requestLocation();
-    
-    if (!location) {
-      console.warn('Location not available');
-      return null;
-    }
-
-    // Получаем город и страну по координатам
-    const cityData = await getCityByCoordinates(location.latitude, location.longitude);
-    
-    if (!cityData) {
-      return null;
-    }
-
-    return {
-      city: cityData.city,
-      country: cityData.country,
+      country: data.address?.country || 'Неизвестно',
       coordinates: {
-        latitude: location.latitude,
-        longitude: location.longitude
+        latitude,
+        longitude
       }
     };
   } catch (error) {
     console.error('Error in auto location detection:', error);
     return null;
   }
-};
-
-// Новая функция для автоматической регистрации
-export const autoRegisterUser = async () => {
-  const webApp = getWebApp();
-  if (!webApp) {
-    return null;
-  }
-
-  const user = webApp.initDataUnsafe?.user;
-  if (!user) {
-    return null;
-  }
-
-  try {
-    // Автоматически создаем профиль пользователя
-    const response = await fetch('/api/profiles', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        telegram_id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name || null,
-        username: user.username || null,
-        photo_url: user.photo_url || null,
-        country: 'Не указано',
-        city: 'Не указано',
-        status: 'other',
-        interests: [],
-        bio: null
-      }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return data.profile;
-    } else if (response.status === 409) {
-      // Профиль уже существует
-      return null;
-    } else {
-      console.error('Failed to auto-register user');
-      return null;
-    }
-  } catch (error) {
-    console.error('Error auto-registering user:', error);
-    return null;
-  }
-};
-
-// Функция для получения данных пользователя с валидацией
-export const getValidatedTelegramUser = () => {
-  const webApp = getWebApp();
-  if (!webApp) {
-    console.warn('Telegram Web App not available');
-    return null;
-  }
-
-  const user = webApp.initDataUnsafe?.user;
-  if (!user || !user.id) {
-    console.warn('Telegram user data not available');
-    return null;
-  }
-
-  console.log('Telegram user found:', user);
-  return user;
-}; 
+} 

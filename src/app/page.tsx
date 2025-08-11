@@ -3,10 +3,8 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { 
-  Users, 
   Globe,
-  ArrowRight,
-  Search
+  ArrowRight
 } from 'lucide-react';
 import { initTelegramApp, getValidatedTelegramUser } from '@/lib/telegram';
 import { useSearchParams } from 'next/navigation';
@@ -15,7 +13,13 @@ function HomePageContent() {
   const searchParams = useSearchParams();
   const countryParam = searchParams.get('country');
   
-  const [telegramUser, setTelegramUser] = useState<any>(null);
+  const [telegramUser, setTelegramUser] = useState<{
+    id: number;
+    first_name?: string;
+    last_name?: string;
+    username?: string;
+    photo_url?: string;
+  } | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<string | null>(countryParam);
 
@@ -184,14 +188,6 @@ function HomePageContent() {
         href: `/profile?country=${countryId}`
       },
       {
-        title: 'Yangi kelganlar uchun',
-        description: 'Yangi mamlakatda moslashish bo\'yicha yo\'riqnoma',
-        icon: '🎓',
-        color: 'bg-purple-500',
-        href: `/newcomers?country=${countryId}`,
-        badge: 'Yangi'
-      },
-      {
         title: 'Huquqshunoslar',
         description: 'O\'zbek huquqshunoslarini toping',
         icon: '⚖️',
@@ -218,21 +214,6 @@ function HomePageContent() {
         icon: '🏠',
         color: 'bg-pink-500',
         href: `/housing?country=${countryId}`
-      },
-      {
-        title: 'Tadbirlar',
-        description: 'Jamiyat tadbirlari',
-        icon: '📅',
-        color: 'bg-red-500',
-        href: `/events?country=${countryId}`
-      },
-      {
-        title: 'Do\'stlarni topish',
-        description: 'Shahringizdagi o\'zbeklarni toping',
-        icon: '👥',
-        color: 'bg-blue-500',
-        href: `/search?country=${countryId}`,
-        badge: 'Mashhur'
       }
     ];
 
@@ -310,11 +291,6 @@ function HomePageContent() {
                       <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
                         {item.title}
                       </h3>
-                      {item.badge && (
-                        <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
-                          {item.badge}
-                        </span>
-                      )}
                     </div>
                     <p className="text-gray-600 text-sm mb-2">
                       {item.description}
@@ -346,10 +322,10 @@ function HomePageContent() {
               </div>
             </div>
             <h1 className="text-3xl font-bold mb-2">
-              O'zbek Jamiyati
+              O&apos;zbek Jamiyati
             </h1>
             <p className="text-blue-100">
-              Chet eldagi o'zbeklar uchun hamma narsa
+              Chet eldagi o&apos;zbeklar uchun hamma narsa
             </p>
             {telegramUser && (
               <p className="text-sm text-blue-200 mt-2">
@@ -391,7 +367,7 @@ function HomePageContent() {
 
         {/* Информация */}
         <div className="text-center text-gray-500 text-sm">
-          <p>&copy; 2024 O'zbek Jamiyati. Barcha huquqlar himoyalangan.</p>
+          <p>&copy; 2024 O&apos;zbek Jamiyati. Barcha huquqlar himoyalangan.</p>
         </div>
       </div>
     </div>

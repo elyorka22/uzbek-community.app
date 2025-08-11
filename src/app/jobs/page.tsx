@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { Briefcase, MapPin, DollarSign, Clock, Search, Filter, Phone, Mail, Calendar, Building } from 'lucide-react';
+import { Briefcase, MapPin, DollarSign, Clock, Search, Phone, Mail, Calendar, Building, Plus } from 'lucide-react';
 import { initTelegramApp } from '@/lib/telegram';
 import BackButton from '@/components/BackButton';
+import AdForm from '@/components/AdForm';
 import { useSearchParams } from 'next/navigation';
 
 function JobsPageContent() {
@@ -14,6 +15,7 @@ function JobsPageContent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [showAdForm, setShowAdForm] = useState(false);
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -82,7 +84,7 @@ function JobsPageContent() {
       id: 1,
       title: 'Frontend Developer',
       company: 'Tech Solutions LLC',
-      description: 'React va TypeScript bo\'yicha tajribali dasturchi kerak. 2+ yillik tajriba talab qilinadi.',
+      description: 'React va TypeScript bo&apos;yicha tajribali dasturchi kerak. 2+ yillik tajriba talab qilinadi.',
       location: 'Moskva',
       salary: '150,000 - 250,000 ₽',
       type: 'To\'liq kunlik',
@@ -225,16 +227,25 @@ function JobsPageContent() {
         </div>
 
         <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <Briefcase className="w-8 h-8" />
-            <div>
-              <h1 className="text-3xl font-bold">Ish va vakansiyalar</h1>
-              {countryParam && (
-                <p className="text-sm text-indigo-200">
-                  {getCountryName(countryParam)}dagi ish imkoniyatlari
-                </p>
-              )}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <Briefcase className="w-8 h-8" />
+              <div>
+                <h1 className="text-3xl font-bold">Ish va vakansiyalar</h1>
+                {countryParam && (
+                  <p className="text-sm text-indigo-200">
+                    {getCountryName(countryParam)}dagi ish imkoniyatlari
+                  </p>
+                )}
+              </div>
             </div>
+            <button
+              onClick={() => setShowAdForm(true)}
+              className="bg-white text-indigo-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center space-x-2"
+            >
+              <Plus className="w-4 h-4" />
+              <span>E&apos;lon qo&apos;shish</span>
+            </button>
           </div>
           <p className="text-indigo-100">
             Shahringizdagi ish imkoniyatlari va vakansiyalar
@@ -364,6 +375,14 @@ function JobsPageContent() {
             <h3 className="text-lg font-medium text-gray-900 mb-2">Vakansiyalar topilmadi</h3>
             <p className="text-gray-600">Boshqa qidiruv so'zlari yoki filtrlarni sinab ko'ring</p>
           </div>
+        )}
+
+        {showAdForm && (
+          <AdForm
+            type="job"
+            onClose={() => setShowAdForm(false)}
+            country={countryParam || ''}
+          />
         )}
       </div>
     </div>

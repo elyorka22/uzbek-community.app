@@ -34,8 +34,7 @@ function ProfilePageContent() {
         console.log('Starting Telegram Web App initialization...');
         
         // Инициализируем Telegram Web App
-        const webApp = initTelegramApp();
-        console.log('WebApp initialized:', !!webApp);
+        initTelegramApp();
         
         // Получаем пользователя
         const user = getValidatedTelegramUser();
@@ -46,7 +45,7 @@ function ProfilePageContent() {
           
           // Автоматически регистрируем пользователя
           console.log('Auto-registering user...');
-          await autoRegisterUser();
+          await autoRegisterUser(user);
           console.log('Auto-registration completed');
         } else {
           console.warn('No Telegram user found');

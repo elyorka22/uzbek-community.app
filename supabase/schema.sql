@@ -49,13 +49,41 @@ CREATE POLICY "Profiles are viewable by everyone" ON profiles
 CREATE POLICY "Users can create their own profile" ON profiles
   FOR INSERT WITH CHECK (true);
 
--- Пользователи могут обновлять только свой профиль
+-- Пользователи могут обновлять свой профиль
 CREATE POLICY "Users can update their own profile" ON profiles
   FOR UPDATE USING (true);
 
--- Пользователи могут удалять только свой профиль
-CREATE POLICY "Users can delete their own profile" ON profiles
-  FOR DELETE USING (true);
+-- Создание таблицы объявлений
+CREATE TABLE IF NOT EXISTS ads (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  city TEXT NOT NULL,
+  contact TEXT NOT NULL,
+  price TEXT,
+  category TEXT,
+  type TEXT NOT NULL CHECK (type IN ('job', 'housing', 'lawyer', 'shop')),
+  country TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Создание индексов для объявлений
+CREATE INDEX IF NOT EXISTS idx_ads_type ON ads(type);
+CREATE INDEX IF NOT EXISTS idx_ads_country ON ads(country);
+CREATE INDEX IF NOT EXISTS idx_ads_city ON ads(city);
+CREATE INDEX IF NOT EXISTS idx_ads_created_at ON ads(created_at);
+
+-- Включение Row Level Security для объявлений
+ALTER TABLE ads ENABLE ROW LEVEL SECURITY;
+
+-- Политики безопасности для объявлений
+-- Все пользователи могут читать объявления
+CREATE POLICY "Ads are viewable by everyone" ON ads
+  FOR SELECT USING (true);
+
+-- Все пользователи могут создавать объявления
+CREATE POLICY "Users can create ads" ON ads
+  FOR INSERT WITH CHECK (true);
 
 -- Создание таблицы для сообщений (для будущего использования)
 CREATE TABLE IF NOT EXISTS messages (
