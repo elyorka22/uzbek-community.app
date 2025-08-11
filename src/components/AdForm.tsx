@@ -138,16 +138,16 @@ export default function AdForm({ type, country, onClose, onSuccess }: AdFormProp
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-gray-200">
         {/* Заголовок */}
-        <div className="flex items-center justify-between p-6 border-b">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gray-50 rounded-t-xl">
           <h2 className="text-xl font-semibold text-gray-900">
             {typeInfo.title}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full"
           >
             <X className="w-5 h-5" />
           </button>
@@ -172,7 +172,7 @@ export default function AdForm({ type, country, onClose, onSuccess }: AdFormProp
               value={formData.title}
               onChange={(e) => handleInputChange('title', e.target.value)}
               placeholder={typeInfo.placeholder}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               required
             />
           </div>
@@ -185,7 +185,7 @@ export default function AdForm({ type, country, onClose, onSuccess }: AdFormProp
             <select
               value={formData.category}
               onChange={(e) => handleInputChange('category', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               required
             >
               <option value="">Kategoriyani tanlang</option>
@@ -207,7 +207,7 @@ export default function AdForm({ type, country, onClose, onSuccess }: AdFormProp
               value={formData.city}
               onChange={(e) => handleInputChange('city', e.target.value)}
               placeholder="Shahar nomi"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               required
             />
           </div>
@@ -222,7 +222,7 @@ export default function AdForm({ type, country, onClose, onSuccess }: AdFormProp
               onChange={(e) => handleInputChange('description', e.target.value)}
               placeholder="Batafsil ma'lumot..."
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               required
             />
           </div>
@@ -238,7 +238,7 @@ export default function AdForm({ type, country, onClose, onSuccess }: AdFormProp
                 value={formData.price}
                 onChange={(e) => handleInputChange('price', e.target.value)}
                 placeholder="Narx (masalan: 50000 so'm)"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               />
             </div>
           )}
@@ -253,24 +253,24 @@ export default function AdForm({ type, country, onClose, onSuccess }: AdFormProp
               value={formData.contact}
               onChange={(e) => handleInputChange('contact', e.target.value)}
               placeholder="Telefon yoki Telegram"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
               required
             />
           </div>
 
           {/* Кнопки */}
-          <div className="flex space-x-3 pt-4">
+          <div className="flex space-x-3 pt-6 pb-6">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-medium"
             >
               Bekor qilish
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+              className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center space-x-2 font-medium shadow-md hover:shadow-lg"
             >
               {isSubmitting ? (
                 <>

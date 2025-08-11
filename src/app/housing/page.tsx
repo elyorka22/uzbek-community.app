@@ -267,7 +267,7 @@ function HousingPageContent() {
             </div>
             <button
               onClick={() => setShowAdForm(true)}
-              className="bg-white text-pink-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center space-x-2"
+              className="bg-white text-pink-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200 shadow-sm hover:shadow-md flex items-center space-x-2 font-medium text-sm"
             >
               <Plus className="w-4 h-4" />
               <span>E&apos;lon qo&apos;shish</span>
