@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Home, MapPin, DollarSign, Users, Bed, Bath, Square, Search, Filter, Phone, Mail, Calendar, Star } from 'lucide-react';
 import { initTelegramApp } from '@/lib/telegram';
 import BackButton from '@/components/BackButton';
 import { useSearchParams } from 'next/navigation';
 
-export default function HousingPage() {
+function HousingPageContent() {
   const searchParams = useSearchParams();
   const countryParam = searchParams.get('country');
   
@@ -67,153 +67,129 @@ export default function HousingPage() {
   const propertyTypes = [
     'Barcha turlar',
     'Kvartira',
+    'Uy',
     'Xona',
     'Studiya',
-    'Uy',
     'Kottej'
   ];
 
   const priceRanges = [
     'Barcha narxlar',
-    '30,000 ₽ gacha',
     '30,000 - 50,000 ₽',
     '50,000 - 80,000 ₽',
     '80,000 - 120,000 ₽',
-    '120,000 ₽ dan yuqori'
+    '120,000 - 200,000 ₽',
+    '200,000+ ₽'
   ];
 
   const housingListings = [
     {
       id: 1,
-      title: 'Zamonaviy 2 xonali kvartira',
-      description: 'Yangi qurilgan binoda, metro yaqinida, to\'liq jihozlangan kvartira. O\'zbek oilasi uchun ideal.',
-      address: 'Moskva, Tverskaya ko\'chasi, 25',
-      price: '85,000 ₽',
+      title: 'Yangi kvartira, markaziy rayon',
+      description: 'Yangi qurilgan binoda, yaxshi jihozlangan kvartira. Metro yaqinida, transport aloqasi yaxshi.',
+      address: 'Moskva, markaziy rayon, Tverskaya ko\'chasi, 25',
+      price: '120,000 ₽',
       type: 'Kvartira',
-      city: 'Moskva',
       rooms: 2,
       area: 65,
-      floor: 8,
-      totalFloors: 12,
+      city: 'Moskva',
       contact: {
-        name: 'Aziz Karimov',
         phone: '+7 (495) 123-45-67',
-        email: 'aziz@housing.ru'
+        email: 'housing@example.com'
       },
       postedDate: '2024-01-15',
-      features: ['Metro yaqinida', 'To\'liq jihozlangan', 'Internet', 'Konditsioner', 'Mebel'],
-      images: ['/api/placeholder/400/300'],
-      rating: 4.8
+      rating: 4.8,
+      features: ['Metro yaqinida', 'Yangi qurilgan', 'Parking', 'Lift']
     },
     {
       id: 2,
-      title: 'Katta xona, oila uchun',
-      description: 'Katta va yorug\' xona, umumiy oshxona va hammom. O\'zbek oilasi uchun mos.',
-      address: 'Sankt-Peterburg, Nevskiy prospekt, 15',
-      price: '45,000 ₽',
-      type: 'Xona',
-      city: 'Sankt-Peterburg',
-      rooms: 1,
-      area: 25,
-      floor: 3,
-      totalFloors: 5,
+      title: 'Kichik uy, tich joyda',
+      description: 'Tich va hovuzli joyda joylashgan kichik uy. Bog\' va hovuz mavjud.',
+      address: 'Moskva, Podmoskovye, Lesnaya ko\'chasi, 15',
+      price: '180,000 ₽',
+      type: 'Uy',
+      rooms: 3,
+      area: 120,
+      city: 'Moskva',
       contact: {
-        name: 'Malika Yusupova',
-        phone: '+7 (812) 234-56-78',
-        email: 'malika@housing.ru'
+        phone: '+7 (495) 234-56-78',
+        email: 'house@example.com'
       },
       postedDate: '2024-01-14',
-      features: ['Yorug\' xona', 'Umumiy oshxona', 'Hammom', 'Internet', 'Qizdirish'],
-      images: ['/api/placeholder/400/300'],
-      rating: 4.5
+      rating: 4.6,
+      features: ['Bog\'', 'Hovuz', 'Parking', 'Tich joy']
     },
     {
       id: 3,
-      title: 'Studiya kvartira',
-      description: 'Kichik va qulay studiya kvartira, yagona talaba yoki juftlik uchun.',
-      address: 'Kazan, Bauman ko\'chasi, 8',
-      price: '35,000 ₽',
+      title: 'Studiya kvartira, talabalar uchun',
+      description: 'Talabalar uchun qulay studiya kvartira. Universitet yaqinida, arzon narxda.',
+      address: 'Sankt-Peterburg, Nevskiy prospekt, 45',
+      price: '45,000 ₽',
       type: 'Studiya',
-      city: 'Kazan',
       rooms: 1,
-      area: 30,
-      floor: 5,
-      totalFloors: 9,
+      area: 35,
+      city: 'Sankt-Peterburg',
       contact: {
-        name: 'Rustam Toshmatov',
-        phone: '+7 (843) 345-67-89',
-        email: 'rustam@housing.ru'
+        phone: '+7 (812) 345-67-89',
+        email: 'student@example.com'
       },
       postedDate: '2024-01-13',
-      features: ['Studiya', 'To\'liq jihozlangan', 'Internet', 'Konditsioner', 'Parking'],
-      images: ['/api/placeholder/400/300'],
-      rating: 4.6
+      rating: 4.4,
+      features: ['Universitet yaqinida', 'Arzon', 'Yangi jihozlar', 'Internet']
     },
     {
       id: 4,
-      title: '3 xonali kvartira, oila uchun',
-      description: 'Katta oila uchun 3 xonali kvartira, bog\'cha va maktab yaqinida.',
-      address: 'Novosibirsk, Krasnyy prospekt, 22',
-      price: '65,000 ₽',
+      title: 'Katta kvartira, oila uchun',
+      description: 'Katta oila uchun qulay kvartira. 3 xona, katta oshxona, balkon.',
+      address: 'Kazan, markaziy rayon, Bauman ko\'chasi, 12',
+      price: '85,000 ₽',
       type: 'Kvartira',
-      city: 'Novosibirsk',
       rooms: 3,
       area: 85,
-      floor: 4,
-      totalFloors: 10,
+      city: 'Kazan',
       contact: {
-        name: 'Dilfuza Rahimova',
-        phone: '+7 (383) 456-78-90',
-        email: 'dilfuza@housing.ru'
+        phone: '+7 (843) 456-78-90',
+        email: 'family@example.com'
       },
       postedDate: '2024-01-12',
-      features: ['3 xona', 'Bog\'cha yaqinida', 'Maktab yaqinida', 'Parking', 'Lift'],
-      images: ['/api/placeholder/400/300'],
-      rating: 4.7
+      rating: 4.7,
+      features: ['Katta oshxona', 'Balkon', 'Lift', 'Xavfsizlik']
     },
     {
       id: 5,
       title: 'Kottej, shahar chetida',
-      description: 'Shahar chetidagi chiroyli kottej, tabiat yaqinida, o\'zbek oilasi uchun.',
-      address: 'Yekaterinburg, Lenina ko\'chasi, 45',
-      price: '120,000 ₽',
+      description: 'Shahar chetida joylashgan qulay kottej. Bog\' va hovuz mavjud.',
+      address: 'Novosibirsk, shahar cheti, Sadovaya ko\'chasi, 8',
+      price: '150,000 ₽',
       type: 'Kottej',
-      city: 'Yekaterinburg',
       rooms: 4,
       area: 150,
-      floor: 2,
-      totalFloors: 2,
+      city: 'Novosibirsk',
       contact: {
-        name: 'Alisher Karimov',
-        phone: '+7 (343) 567-89-01',
-        email: 'alisher@housing.ru'
+        phone: '+7 (383) 567-89-01',
+        email: 'cottage@example.com'
       },
       postedDate: '2024-01-11',
-      features: ['Kottej', 'Bog\'', 'Garaj', 'Oshxona', '4 xona'],
-      images: ['/api/placeholder/400/300'],
-      rating: 4.9
+      rating: 4.9,
+      features: ['Bog\'', 'Hovuz', 'Garaj', 'Tich joy']
     },
     {
       id: 6,
-      title: '1 xonali kvartira, markazda',
-      description: 'Shahar markazida joylashgan 1 xonali kvartira, transport va do\'konlar yaqinida.',
-      address: 'Moskva, Arbat ko\'chasi, 12',
-      price: '75,000 ₽',
-      type: 'Kvartira',
-      city: 'Moskva',
+      title: 'Xona, umumiy kvartira',
+      description: 'Umumiy kvartira ichida xona. Talabalar yoki ishlayotgan odamlar uchun.',
+      address: 'Yekaterinburg, markaziy rayon, Lenina ko\'chasi, 30',
+      price: '25,000 ₽',
+      type: 'Xona',
       rooms: 1,
-      area: 40,
-      floor: 6,
-      totalFloors: 8,
+      area: 20,
+      city: 'Yekaterinburg',
       contact: {
-        name: 'Nodira Karimova',
-        phone: '+7 (495) 678-90-12',
-        email: 'nodira@housing.ru'
+        phone: '+7 (343) 678-90-12',
+        email: 'room@example.com'
       },
       postedDate: '2024-01-10',
-      features: ['Markazda', 'Transport yaqinida', 'Do\'konlar yaqinida', 'Internet', 'Mebel'],
-      images: ['/api/placeholder/400/300'],
-      rating: 4.4
+      rating: 4.2,
+      features: ['Arzon', 'Markazda', 'Internet', 'Oshxona']
     }
   ];
 
@@ -225,18 +201,21 @@ export default function HousingPage() {
                        listing.city === selectedCity;
     const matchesType = selectedType === '' || selectedType === 'Barcha turlar' || 
                        listing.type === selectedType;
-    
-    // Простая фильтрация по цене
     let matchesPrice = true;
     if (priceRange && priceRange !== 'Barcha narxlar') {
       const price = parseInt(listing.price.replace(/[^\d]/g, ''));
-      if (priceRange.includes('gacha') && price > 30000) matchesPrice = false;
-      else if (priceRange.includes('30,000 - 50,000') && (price < 30000 || price > 50000)) matchesPrice = false;
-      else if (priceRange.includes('50,000 - 80,000') && (price < 50000 || price > 80000)) matchesPrice = false;
-      else if (priceRange.includes('80,000 - 120,000') && (price < 80000 || price > 120000)) matchesPrice = false;
-      else if (priceRange.includes('dan yuqori') && price < 120000) matchesPrice = false;
+      if (priceRange.includes('30,000 - 50,000')) {
+        matchesPrice = price >= 30000 && price <= 50000;
+      } else if (priceRange.includes('50,000 - 80,000')) {
+        matchesPrice = price >= 50000 && price <= 80000;
+      } else if (priceRange.includes('80,000 - 120,000')) {
+        matchesPrice = price >= 80000 && price <= 120000;
+      } else if (priceRange.includes('120,000 - 200,000')) {
+        matchesPrice = price >= 120000 && price <= 200000;
+      } else if (priceRange.includes('200,000+')) {
+        matchesPrice = price >= 200000;
+      }
     }
-    
     return matchesSearch && matchesCity && matchesType && matchesPrice;
   });
 
@@ -350,9 +329,9 @@ export default function HousingPage() {
               <div className="p-6">
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-lg font-semibold text-gray-900">{listing.title}</h3>
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <Calendar className="w-4 h-4" />
-                    <span>{formatDate(listing.postedDate)}</span>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold text-pink-600">{listing.price}</p>
+                    <p className="text-sm text-gray-500">oyiga</p>
                   </div>
                 </div>
                 
@@ -363,31 +342,22 @@ export default function HousingPage() {
                     <MapPin className="w-4 h-4 text-gray-400" />
                     <span>{listing.address}</span>
                   </div>
-                  <div className="flex items-center space-x-2 text-sm text-gray-700">
-                    <DollarSign className="w-4 h-4 text-green-500" />
-                    <span className="font-semibold text-lg">{listing.price}</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-4 mb-4">
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Bed className="w-4 h-4 text-blue-500" />
-                    <span>{listing.rooms} xona</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Square className="w-4 h-4 text-purple-500" />
-                    <span>{listing.area} m²</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Users className="w-4 h-4 text-orange-500" />
-                    <span>{listing.floor}/{listing.totalFloors}</span>
+                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+                    <div className="flex items-center space-x-1">
+                      <Users className="w-4 h-4" />
+                      <span>{listing.rooms} xona</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Square className="w-4 h-4" />
+                      <span>{listing.area} m²</span>
+                    </div>
                   </div>
                 </div>
 
                 <div className="mb-4">
                   <h4 className="text-sm font-medium text-gray-900 mb-2">Xususiyatlar:</h4>
                   <div className="flex flex-wrap gap-1">
-                    {listing.features.slice(0, 3).map((feature, index) => (
+                    {listing.features.map((feature, index) => (
                       <span
                         key={index}
                         className="px-2 py-1 bg-pink-100 text-pink-700 text-xs rounded-full"
@@ -395,12 +365,17 @@ export default function HousingPage() {
                         {feature}
                       </span>
                     ))}
-                    {listing.features.length > 3 && (
-                      <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                        +{listing.features.length - 3}
-                      </span>
-                    )}
                   </div>
+                </div>
+
+                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                  <div className="flex items-center space-x-1">
+                    <Calendar className="w-4 h-4" />
+                    <span>{formatDate(listing.postedDate)}</span>
+                  </div>
+                  <span className="px-2 py-1 bg-gray-100 rounded-full text-xs">
+                    {listing.type}
+                  </span>
                 </div>
 
                 <div className="flex space-x-2">
@@ -433,5 +408,20 @@ export default function HousingPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function HousingPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Yuklanmoqda...</p>
+        </div>
+      </div>
+    }>
+      <HousingPageContent />
+    </Suspense>
   );
 } 
