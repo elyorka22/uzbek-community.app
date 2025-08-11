@@ -4,8 +4,12 @@ import { useState, useEffect } from 'react';
 import { GraduationCap, FileText, MapPin, Phone, Globe, Users, Building2, ShoppingBag, CheckCircle, AlertCircle, Info } from 'lucide-react';
 import { initTelegramApp } from '@/lib/telegram';
 import BackButton from '@/components/BackButton';
+import { useSearchParams } from 'next/navigation';
 
 export default function NewcomersPage() {
+  const searchParams = useSearchParams();
+  const countryParam = searchParams.get('country');
+  
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -21,6 +25,26 @@ export default function NewcomersPage() {
 
     initializeApp();
   }, []);
+
+  // Функция для получения названия страны
+  const getCountryName = (countryId: string) => {
+    const countries: { [key: string]: string } = {
+      'russia': 'Rossiya',
+      'turkey': 'Turkiya',
+      'usa': 'AQSh',
+      'korea': 'Koreya',
+      'china': 'Xitoy',
+      'uae': 'BAA',
+      'poland': 'Polsha',
+      'germany': 'Germaniya',
+      'canada': 'Kanada',
+      'latvia': 'Latviya',
+      'lithuania': 'Litva',
+      'estonia': 'Estoniya',
+      'kazakhstan': 'Qozog\'iston'
+    };
+    return countries[countryId] || countryId;
+  };
 
   const guides = [
     {
@@ -118,13 +142,20 @@ export default function NewcomersPage() {
     <div className="min-h-screen bg-gray-50 py-6">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-4">
-          <BackButton href="/" />
+          <BackButton href={countryParam ? `/?country=${countryParam}` : '/'} />
         </div>
 
         <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-3 mb-4">
             <GraduationCap className="w-8 h-8" />
-            <h1 className="text-3xl font-bold">Yangi kelganlar uchun</h1>
+            <div>
+              <h1 className="text-3xl font-bold">Yangi kelganlar uchun</h1>
+              {countryParam && (
+                <p className="text-sm text-purple-200">
+                  {getCountryName(countryParam)}da moslashish
+                </p>
+              )}
+            </div>
           </div>
           <p className="text-purple-100">
             Yangi mamlakatda moslashish bo'yicha to'liq yo'riqnoma

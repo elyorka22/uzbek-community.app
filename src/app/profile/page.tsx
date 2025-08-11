@@ -9,8 +9,12 @@ import { Save, User, MapPin, GraduationCap, Briefcase, Home, Users, AlertCircle 
 import { initTelegramApp, getValidatedTelegramUser, autoRegisterUser } from '@/lib/telegram';
 import LocationDetector from '@/components/LocationDetector';
 import BackButton from '@/components/BackButton';
+import { useSearchParams } from 'next/navigation';
 
 export default function ProfilePage() {
+  const searchParams = useSearchParams();
+  const countryParam = searchParams.get('country');
+  
   const [telegramUser, setTelegramUser] = useState<{
     id: number;
     first_name?: string;
@@ -72,7 +76,7 @@ export default function ProfilePage() {
     username: '',
     photoUrl: '',
     location: {
-      country: '',
+      country: countryParam || '',
       city: ''
     },
     status: 'student',
@@ -94,10 +98,34 @@ export default function ProfilePage() {
         firstName: telegramUser.first_name || '',
         lastName: telegramUser.last_name || '',
         username: telegramUser.username || '',
-        photoUrl: telegramUser.photo_url || ''
+        photoUrl: telegramUser.photo_url || '',
+        location: {
+          ...prev.location,
+          country: countryParam || prev.location.country
+        }
       }));
     }
-  }, [profile, telegramUser, isInitialized]);
+  }, [profile, telegramUser, isInitialized, countryParam]);
+
+  // Функция для получения названия страны
+  const getCountryName = (countryId: string) => {
+    const countries: { [key: string]: string } = {
+      'russia': 'Rossiya',
+      'turkey': 'Turkiya',
+      'usa': 'AQSh',
+      'korea': 'Koreya',
+      'china': 'Xitoy',
+      'uae': 'BAA',
+      'poland': 'Polsha',
+      'germany': 'Germaniya',
+      'canada': 'Kanada',
+      'latvia': 'Latviya',
+      'lithuania': 'Litva',
+      'estonia': 'Estoniya',
+      'kazakhstan': 'Qozog\'iston'
+    };
+    return countries[countryId] || countryId;
+  };
 
   // Показываем загрузку только если еще не инициализированы
   if (!isInitialized) {
@@ -217,14 +245,21 @@ export default function ProfilePage() {
       <div className="max-w-2xl mx-auto px-4">
         {/* Кнопка назад */}
         <div className="mb-4">
-          <BackButton href="/" />
+          <BackButton href={countryParam ? `/?country=${countryParam}` : '/'} />
         </div>
 
         {/* Заголовок */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-3 mb-4">
             <User className="w-6 h-6 text-blue-500" />
-            <h1 className="text-2xl font-bold text-gray-900">Mening profilim</h1>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Mening profilim</h1>
+              {countryParam && (
+                <p className="text-sm text-gray-600">
+                  {getCountryName(countryParam)}dagi profil
+                </p>
+              )}
+            </div>
           </div>
           <p className="text-gray-600">
             O\'zingiz haqida gapirib bering, boshqa o\'zbeklar sizni topa olishi uchun

@@ -7,10 +7,14 @@ import { UserStatus } from '@/types/user';
 import { Search, MapPin, Users, Filter, User, GraduationCap, Briefcase, Home } from 'lucide-react';
 import { initTelegramApp } from '@/lib/telegram';
 import BackButton from '@/components/BackButton';
+import { useSearchParams } from 'next/navigation';
 
 export default function SearchPage() {
+  const searchParams = useSearchParams();
+  const countryParam = searchParams.get('country');
+  
   const [filters, setFilters] = useState({
-    country: '',
+    country: countryParam || '',
     city: '',
     status: '' as UserStatus | '',
     interests: [] as string[]
@@ -22,6 +26,16 @@ export default function SearchPage() {
   useEffect(() => {
     initTelegramApp();
   }, []);
+
+  // Обновляем фильтр страны при изменении параметра URL
+  useEffect(() => {
+    if (countryParam) {
+      setFilters(prev => ({
+        ...prev,
+        country: countryParam
+      }));
+    }
+  }, [countryParam]);
 
   const { profiles, loading, error } = useProfiles({
     country: filters.country || undefined,
@@ -53,7 +67,7 @@ export default function SearchPage() {
 
   const clearFilters = () => {
     setFilters({
-      country: '',
+      country: countryParam || '',
       city: '',
       status: '',
       interests: []
@@ -65,12 +79,32 @@ export default function SearchPage() {
     return option ? option.label : status;
   };
 
+  // Функция для получения названия страны
+  const getCountryName = (countryId: string) => {
+    const countries: { [key: string]: string } = {
+      'russia': 'Rossiya',
+      'turkey': 'Turkiya',
+      'usa': 'AQSh',
+      'korea': 'Koreya',
+      'china': 'Xitoy',
+      'uae': 'BAA',
+      'poland': 'Polsha',
+      'germany': 'Germaniya',
+      'canada': 'Kanada',
+      'latvia': 'Latviya',
+      'lithuania': 'Litva',
+      'estonia': 'Estoniya',
+      'kazakhstan': 'Qozog\'iston'
+    };
+    return countries[countryId] || countryId;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Поиск пользователей...</p>
+          <p className="text-gray-600">Foydalanuvchilarni qidirish...</p>
         </div>
       </div>
     );
@@ -80,7 +114,7 @@ export default function SearchPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600">Ошибка загрузки: {error}</p>
+          <p className="text-red-600">Yuklashda xatolik: {error}</p>
         </div>
       </div>
     );
@@ -91,14 +125,21 @@ export default function SearchPage() {
       <div className="max-w-6xl mx-auto px-4">
         {/* Кнопка назад */}
         <div className="mb-4">
-          <BackButton href="/" />
+          <BackButton href={countryParam ? `/?country=${countryParam}` : '/'} />
         </div>
 
         {/* Заголовок */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-3 mb-4">
             <Search className="w-6 h-6 text-blue-500" />
-            <h1 className="text-2xl font-bold text-gray-900">O'zbeklarni qidirish</h1>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Do'stlarni topish</h1>
+              {countryParam && (
+                <p className="text-sm text-gray-600">
+                  {getCountryName(countryParam)}dagi o'zbeklar
+                </p>
+              )}
+            </div>
           </div>
           <p className="text-gray-600">
             Manzil, holat va qiziqishlar bo'yicha boshqa o'zbeklarni toping

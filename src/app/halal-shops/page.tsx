@@ -4,8 +4,12 @@ import { useState, useEffect } from 'react';
 import { ShoppingBag, MapPin, Phone, Clock, Star, Search, Filter, Navigation } from 'lucide-react';
 import { initTelegramApp } from '@/lib/telegram';
 import BackButton from '@/components/BackButton';
+import { useSearchParams } from 'next/navigation';
 
 export default function HalalShopsPage() {
+  const searchParams = useSearchParams();
+  const countryParam = searchParams.get('country');
+  
   const [isInitialized, setIsInitialized] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
@@ -23,6 +27,26 @@ export default function HalalShopsPage() {
 
     initializeApp();
   }, []);
+
+  // Функция для получения названия страны
+  const getCountryName = (countryId: string) => {
+    const countries: { [key: string]: string } = {
+      'russia': 'Rossiya',
+      'turkey': 'Turkiya',
+      'usa': 'AQSh',
+      'korea': 'Koreya',
+      'china': 'Xitoy',
+      'uae': 'BAA',
+      'poland': 'Polsha',
+      'germany': 'Germaniya',
+      'canada': 'Kanada',
+      'latvia': 'Latviya',
+      'lithuania': 'Litva',
+      'estonia': 'Estoniya',
+      'kazakhstan': 'Qozog\'iston'
+    };
+    return countries[countryId] || countryId;
+  };
 
   const cities = [
     'Barcha shaharlar',
@@ -145,13 +169,20 @@ export default function HalalShopsPage() {
     <div className="min-h-screen bg-gray-50 py-6">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-4">
-          <BackButton href="/" />
+          <BackButton href={countryParam ? `/?country=${countryParam}` : '/'} />
         </div>
 
         <div className="bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-3 mb-4">
             <ShoppingBag className="w-8 h-8" />
-            <h1 className="text-3xl font-bold">Halol do'konlar</h1>
+            <div>
+              <h1 className="text-3xl font-bold">Halol do'konlar</h1>
+              {countryParam && (
+                <p className="text-sm text-emerald-200">
+                  {getCountryName(countryParam)}dagi halol do'konlar
+                </p>
+              )}
+            </div>
           </div>
           <p className="text-emerald-100">
             Shahringizdagi halol mahsulotlar do'konlari

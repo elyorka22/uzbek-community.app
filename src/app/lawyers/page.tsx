@@ -4,8 +4,12 @@ import { useState, useEffect } from 'react';
 import { Building2, Phone, Mail, MapPin, Star, Search, Filter } from 'lucide-react';
 import { initTelegramApp } from '@/lib/telegram';
 import BackButton from '@/components/BackButton';
+import { useSearchParams } from 'next/navigation';
 
 export default function LawyersPage() {
+  const searchParams = useSearchParams();
+  const countryParam = searchParams.get('country');
+  
   const [isInitialized, setIsInitialized] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
@@ -23,6 +27,26 @@ export default function LawyersPage() {
 
     initializeApp();
   }, []);
+
+  // Функция для получения названия страны
+  const getCountryName = (countryId: string) => {
+    const countries: { [key: string]: string } = {
+      'russia': 'Rossiya',
+      'turkey': 'Turkiya',
+      'usa': 'AQSh',
+      'korea': 'Koreya',
+      'china': 'Xitoy',
+      'uae': 'BAA',
+      'poland': 'Polsha',
+      'germany': 'Germaniya',
+      'canada': 'Kanada',
+      'latvia': 'Latviya',
+      'lithuania': 'Litva',
+      'estonia': 'Estoniya',
+      'kazakhstan': 'Qozog\'iston'
+    };
+    return countries[countryId] || countryId;
+  };
 
   const specialties = [
     'Barcha sohalar',
@@ -104,13 +128,20 @@ export default function LawyersPage() {
     <div className="min-h-screen bg-gray-50 py-6">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-4">
-          <BackButton href="/" />
+          <BackButton href={countryParam ? `/?country=${countryParam}` : '/'} />
         </div>
 
         <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center space-x-3 mb-4">
             <Building2 className="w-8 h-8" />
-            <h1 className="text-3xl font-bold">Huquqshunoslar</h1>
+            <div>
+              <h1 className="text-3xl font-bold">Huquqshunoslar</h1>
+              {countryParam && (
+                <p className="text-sm text-orange-200">
+                  {getCountryName(countryParam)}dagi huquqshunoslar
+                </p>
+              )}
+            </div>
           </div>
           <p className="text-orange-100">
             O'zbek huquqshunoslarini toping va maslahat oling
